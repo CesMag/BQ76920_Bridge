@@ -1,17 +1,20 @@
 # BQ76920_Bridge
 
-**Texas A&M University — ESET 453/653: Semiconductor Validation and Verification**
+**Texas A&M University - ESET 453/653: Semiconductor Validation and Verification**
+
 **Instructor:** Tom Munns | **Spring 2026**
+
+**Author**: Cesar Magana
 
 ---
 
 ## Project Overview
 
-This project implements a **low-cost, open-source replacement for the Texas Instruments EV2300/EV2400 USB interface adapter** using the **Adafruit Feather STM32F405 Express**. The resulting firmware allows a host PC running **bqStudio** to communicate with the **TI BQ76920 Analog Front-End (AFE)** battery monitor IC over USB — the same workflow used in the ESET 453 laboratory curriculum starting at Week 8.
+This project implements a **low-cost, open-source replacement for the Texas Instruments EV2300/EV2400 USB interface adapter** using the **Adafruit Feather STM32F405 Express**. The resulting firmware allows a host PC running **bqStudio** to communicate with the **TI BQ76920 Analog Front-End (AFE)** battery monitor IC over USB.
 
 The TI EV2400 retails for ~$60 and relies on a proprietary MSP430F5529-based design running at 4 MHz with USB HID class communication. This project replicates that USB-to-SMBus bridge functionality on a 168 MHz Cortex-M4F at a fraction of the cost, with fully open, auditable firmware.
 
-**Critically, the EV2300/EV2400 has no scripting interface** — it cannot be controlled programmatically, which prevents automation of the ESET 453 lab exercises. This project eliminates that limitation.
+**The EV2300/EV2400 has no scripting interface** — it cannot be controlled programmatically, which prevents automation of the ESET 453 lab exercises. This project eliminates that limitation.
 
 ---
 
@@ -19,18 +22,24 @@ The TI EV2400 retails for ~$60 and relies on a proprietary MSP430F5529-based des
 
 ### Host Interface Board — Adafruit Feather STM32F405 Express
 
-[Product Page](https://www.adafruit.com/product/4382) | [Schematic](https://cdn-shop.adafruit.com/product-files/4382/4382-schematic.pdf)
+[Product Page](https://www.adafruit.com/product/4382) | [Schematic (remote)](https://cdn-shop.adafruit.com/product-files/4382/4382-schematic.pdf) | [Schematic (local)](datasheets/Feather%20STM32F405%20rev%20A.pdf)
 
 | Spec | Value |
 |---|---|
 | MCU | STM32F405RGT6 (ARM Cortex-M4F @ 168 MHz) |
 | Flash | 1024 KB |
 | RAM | 192 KB |
-| USB | USB-C Full Speed OTG (PA11/PA12) |
+| USB | USB-C Full Speed OTG (PA11 DM / PA12 DP) |
 | I2C | I2C1 on PB6 (SCL) / PB7 (SDA) — onboard 10K pullups |
+| STEMMA QT / Qwiic | JST SH 1mm, wired to I2C1 (PB6/PB7) — same bus as BQ76920 |
 | Debug UART | USART3 on PB10 (TX) / PB11 (RX) |
-| Debug Interface | SWD on PA13/PA14 (bottom 2×5 pad) |
-| Status LED | PC1 |
+| Debug Interface | SWD on PA13 (SWDIO) / PA14 (SWCLK) — bottom 2×5 pad |
+| Status LED (red) | PC1 — next to USB jack |
+| NeoPixel RGB LED | PC0 (WS2812B, Arduino D8) — available for color-coded status |
+| 2 MB SPI Flash | Internal SPI bus (U1, not on GPIO headers) — available for calibration/log storage |
+| LiPo Charger | MCP73831T (U3), charges via USB-C VBUS; orange CHG LED |
+| Battery Voltage | V_DIV net → A6 ADC — resistor-divided LiPo voltage readback |
+| SD Card | SDIO (PC8–PC12 + PD2); detect on PB12 — **Rev A bug: SD detect non-functional** |
 | Form Factor | Adafruit Feather (51mm × 23mm) |
 
 ### Device Under Test — TI BQ76920 AFE
@@ -244,4 +253,3 @@ st-flash write build/Debug/BQ76920_Bridge.elf 0x08000000
 ---
 
 *Texas A&M University — ETID Department — ESET 453/653 Spring 2026*
-*Student: Cesar Magana*
