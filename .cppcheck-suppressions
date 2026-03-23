@@ -1,0 +1,36 @@
+# cppcheck suppression list for BQ76920_Bridge
+# Format: <error-id>:<filename>:<line>  OR  <error-id>:<filename>  OR  <error-id>
+#
+# These suppressions cover known false positives in STM32CubeMX-generated HAL code.
+# Do NOT add suppressions for application code in bq76920.c / usb_hid_bridge.c.
+
+# ── CubeMX-generated files ────────────────────────────────────────────────────
+
+# HAL functions are defined for the library interface; call sites live in
+# user code or interrupt vectors that cppcheck cannot see in isolation.
+unusedFunction:Core/Src/stm32f4xx_hal_msp.c
+unusedFunction:Core/Src/stm32f4xx_it.c
+unusedFunction:Core/Src/stm32f4xx_hal_timebase_tim.c
+unusedFunction:Core/Src/syscalls.c
+unusedFunction:Core/Src/sysmem.c
+unusedFunction:Core/Src/system_stm32f4xx.c
+unusedFunction:Core/Src/gpio.c
+unusedFunction:Core/Src/i2c.c
+unusedFunction:Core/Src/usart.c
+
+# CubeMX generates weak callback stubs that are intentionally overrideable;
+# the prototype mismatch warning fires on the __weak attribute macro expansion.
+unmatchedSuppression
+
+# System headers (stdint, string, etc.) are provided by the cross-compiler
+# sysroot; cppcheck cannot find them without --sysroot, suppress the noise.
+missingIncludeSystem
+
+# The HAL uses #error guards like #error "HSE_VALUE not defined" that trigger
+# when cppcheck evaluates an inactive branch — these are not real errors.
+preprocessorErrorDirective
+
+# ── Linker / startup file ─────────────────────────────────────────────────────
+# startup_stm32f405xx.s is assembly — cppcheck does not analyse it, but the
+# C-language scan may warn about the weak Reset_Handler symbol.
+unusedFunction:startup_stm32f405xx.s

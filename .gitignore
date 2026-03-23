@@ -1,4 +1,43 @@
-build
+# ── Build outputs ─────────────────────────────────────────────────────────────
+build/
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.d
+*.su
+
+# ── CMake internal directories ────────────────────────────────────────────────
+.cmake/
+CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
+
+# ── CubeMX scratch / backups ──────────────────────────────────────────────────
 mx.scratch
-!.settings
+*.ioc~
+*.bak
+# NOTE: BQ76920_Bridge.ioc itself IS tracked — it is the CubeMX source of truth
+
+# ── IDE / editor state ────────────────────────────────────────────────────────
+.vscode/
+*.code-workspace
+# Keep .settings/ tracked (negation was in original .gitignore)
+!.settings/
+# Keep Claude.md untracked
 CLAUDE.md
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+**/.DS_Store
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+
+# ── Explicitly NOT ignored (safety reminders) ─────────────────────────────────
+# CMakePresets.json   — tracked (CI and local builds depend on it)
+# BQ76920_Bridge.ioc  — tracked (CubeMX source of truth)
+# cmake/              — tracked (toolchain and generated CMakeLists.txt)

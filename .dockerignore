@@ -1,0 +1,30 @@
+# Build outputs
+build/
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.d
+*.su
+
+# Version control
+.git/
+.gitignore
+
+# Large reference files — not needed to compile
+datasheets/
+*.pdf
+
+# macOS artifacts
+.DS_Store
+**/.DS_Store
+
+# IDE / editor state
+.vscode/
+*.code-workspace
+
+# CubeMX scratch
+mx.scratch
+*.ioc~
+*.bak

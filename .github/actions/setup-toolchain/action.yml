@@ -1,0 +1,20 @@
+name: Setup ARM Toolchain
+description: Install arm-none-eabi-gcc, CMake, Ninja, and cppcheck via apt-get
+
+runs:
+  using: composite
+  steps:
+    - name: Install toolchain and build tools
+      shell: bash
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y --no-install-recommends \
+          gcc-arm-none-eabi \
+          binutils-arm-none-eabi \
+          cmake \
+          ninja-build \
+          cppcheck \
+          python3
+        arm-none-eabi-gcc --version
+        cmake --version
+        ninja --version
