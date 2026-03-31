@@ -54,6 +54,19 @@ The TI EV2400 retails for ~$60 and relies on a proprietary MSP430F5529-based des
 | Key Features | OV/UV protection, OCD, SCD, die temperature, 3× thermistor |
 | Package | TSSOP-24 |
 
+### I2C Wiring -- Feather to BQ76920 EVM
+
+The EVM J8 I2C header and the Feather STEMMA QT connector have **different pin orders** -- a straight-through cable will not work. Use individual jumper wires.
+
+| EVM J8 (top to bottom) | Wire Color | Feather Connection |
+|---|---|---|
+| 1 - GND | Black | GND |
+| 2 - SCL | Yellow | SCL (PB6) |
+| 3 - SDA | Blue | SDA (PB7) |
+| 4 - NC | -- | Not connected |
+
+The Feather STEMMA QT pinout is GND / V+ / SDA / SCL -- note that SCL and SDA are swapped relative to the EVM, and the EVM has no power pin where the Feather has V+.
+
 ### Interface Being Replaced — TI EV2300 / EV2400
 
 The **EV2300** is a legacy multi-chip USB interface board that uses a **proprietary USB protocol** with a custom Windows driver to bridge a PC to TI battery management ICs over SMBus/I2C/HDQ. The **EV2400** replaced it using a single MSP430F5529 microcontroller at 4 MHz running **USB HID class**, making it driver-free on modern operating systems.

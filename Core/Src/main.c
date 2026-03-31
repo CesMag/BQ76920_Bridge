@@ -25,7 +25,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bq76920.h"
+#include "usb_hid_bridge.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,7 +48,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+static BQ76920_t bms;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,7 +95,21 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+  HAL_Delay(500);
+  printf("BQ76920 Bridge v0.1\r\n");
 
+  HAL_StatusTypeDef bmsStatus = BQ76920_Initialise(&bms, &hi2c1, 5, 4.25f, 2.8f, 2600, 3.6f);
+  if (bmsStatus == HAL_OK)
+  {
+    printf("BMS Init: OK  addr=0x%02X  CRC=%s  GAIN=%u  OFFSET=%d\r\n",
+           bms.i2cAddr, bms.crcEnabled ? "on" : "off", bms.GAIN, bms.OFFSET);
+  }
+  else
+  {
+    printf("BMS Init: FAIL (no device at 0x30 or 0x10)\r\n");
+  }
+
+  Bridge_Init(&bms);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,6 +119,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    Bridge_ProcessCommand();
+    HAL_GPIO_TogglePin(GPIOC, LED_Pin);
+    HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
@@ -153,7 +172,17 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+/**
+  * @brief  Retarget printf to USART3
+  * @param  ch  Character to transmit
+  * @retval int  The transmitted character
+  */
+int __io_putchar(int ch)
+{
+  uint8_t c = (uint8_t)ch;
+  HAL_UART_Transmit(&huart3, &c, 1, HAL_MAX_DELAY);
+  return ch;
+}
 /* USER CODE END 4 */
 
 /**

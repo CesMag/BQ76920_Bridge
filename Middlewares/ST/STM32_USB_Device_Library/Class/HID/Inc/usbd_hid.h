@@ -43,11 +43,15 @@ extern "C" {
 #ifndef HID_EPIN_ADDR
 #define HID_EPIN_ADDR                              0x81U
 #endif /* HID_EPIN_ADDR */
-#define HID_EPIN_SIZE                              0x04U
+#ifndef HID_EPOUT_ADDR
+#define HID_EPOUT_ADDR                             0x01U
+#endif /* HID_EPOUT_ADDR */
+#define HID_EPIN_SIZE                              0x40U
+#define HID_EPOUT_SIZE                             0x40U
 
-#define USB_HID_CONFIG_DESC_SIZ                    34U
+#define USB_HID_CONFIG_DESC_SIZ                    41U
 #define USB_HID_DESC_SIZ                           9U
-#define HID_MOUSE_REPORT_DESC_SIZE                 74U
+#define HID_REPORT_DESC_SIZE                       34U
 
 #define HID_DESCRIPTOR_TYPE                        0x21U
 #define HID_REPORT_DESC                            0x22U
@@ -89,7 +93,11 @@ typedef struct
   uint32_t IdleState;
   uint32_t AltSetting;
   USBD_HID_StateTypeDef state;
+  uint8_t  RxBuffer[64];
 } USBD_HID_HandleTypeDef;
+
+/** @brief  Application callback for HID OUT reports (set by app before USB init) */
+extern void (*USBD_HID_OutEventCallback)(uint8_t *buf, uint32_t len);
 
 /*
  * HID Class specification version 1.1
