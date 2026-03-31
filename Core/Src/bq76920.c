@@ -230,6 +230,14 @@ HAL_StatusTypeDef BQ76920_Initialise(BQ76920_t *bms,
     bms->crcEnabled = 0U;
   }
 
+  /* Clear all faults first -- BQ76920 won't enable CC_EN or FETs
+     while protection faults are active */
+  status = BQ76920_WriteRegister(bms, SYS_STAT, 0xFFU);
+  if (status != HAL_OK)
+  {
+    return status;
+  }
+
   /* Write CC_CFG = 0x19 (required at startup per datasheet) */
   status = BQ76920_WriteRegister(bms, CC_CFG, 0x19U);
   if (status != HAL_OK)

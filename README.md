@@ -191,13 +191,47 @@ BQ76920_Bridge/
 
 ```bash
 # Configure
-cmake --preset Debug
+cmake --preset debug
 
 # Build
-cmake --build build/Debug
+cmake --build build/debug
 
-# Flash via ST-Link (SWD pads on bottom of Feather)
-st-flash write build/Debug/BQ76920_Bridge.elf 0x08000000
+# Generate binary for flashing
+arm-none-eabi-objcopy -O binary build/debug/BQ76920_Bridge.elf build/debug/BQ76920_Bridge.bin
+```
+
+### Flash (DFU over USB -- no extra hardware needed)
+
+The Adafruit Feather STM32F405 has a built-in USB DFU bootloader in ROM. No ST-Link programmer required.
+
+1. **Connect the B0 pin to 3.3V** on the Feather header with a jumper wire
+2. **Press the RESET button** while USB is connected to the PC
+3. The board re-enumerates as "STM32 BOOTLOADER" (VID 0x0483, PID 0xDF11)
+4. **Flash the firmware:**
+   ```bash
+   dfu-util -a 0 --dfuse-address 0x08000000:leave -D build/debug/BQ76920_Bridge.bin
+   ```
+5. **Remove the B0 jumper** and press RESET -- the board boots into the firmware
+6. **Press the BOOT button on the BQ76920 EVM** to wake the AFE for I2C communication
+
+Install dfu-util via Homebrew: `brew install dfu-util`
+
+Alternatively, flash via STM32CubeProgrammer (USB DFU mode) or ST-Link (SWD pads on bottom of Feather).
+
+### Run Tests
+
+```bash
+# Unit tests (no hardware needed)
+cmake -S tests -B build/tests
+cmake --build build/tests
+ctest --test-dir build/tests --output-on-failure
+
+# Integration tests (device must be flashed and connected)
+pip install hidapi
+python3 tests/integration/test_usb_hid_bridge.py
+
+# Full bench test (device + BQ76920 EVM powered)
+python3 tests/integration/test_bench_no_cells.py
 ```
 
 ---
