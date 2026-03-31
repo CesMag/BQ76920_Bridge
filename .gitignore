@@ -25,8 +25,8 @@ mx.scratch
 *.code-workspace
 # Keep .settings/ tracked (negation was in original .gitignore)
 !.settings/
-# Keep Claude.md untracked
 CLAUDE.md
+.claude/
 
 # ── macOS ─────────────────────────────────────────────────────────────────────
 .DS_Store
