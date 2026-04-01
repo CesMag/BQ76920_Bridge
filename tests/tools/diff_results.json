@@ -1,0 +1,3956 @@
+{
+  "timestamp": "2026-04-01T00:35:05.186643",
+  "real_serial": "HPA02 FW:2.0a/TUSB3210:0",
+  "stm32_serial": "HPA02 FW:2.0b/TUSB3210:0",
+  "total": 124,
+  "matches": 16,
+  "mismatches_count": 108,
+  "results": [
+    {
+      "cmd": "0x00",
+      "real": {
+        "resp": "0x40",
+        "plen": 3,
+        "payload": "55 00 08",
+        "raw": "0baa4000000103550008a355"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x01",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x02",
+      "real": {
+        "resp": "0x41",
+        "plen": 4,
+        "payload": "00 00 00 08",
+        "raw": "0caa410000010400000008f555"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x03",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "00 93",
+        "raw": "0aaa46000001020093b955"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x08",
+      "real": {
+        "resp": "0x42",
+        "plen": 3,
+        "payload": "02 00 08",
+        "raw": "0baa42000001030200087d55"
+      },
+      "stm32": {
+        "resp": "0x41",
+        "plen": 4,
+        "payload": "00 00 f8 08",
+        "raw": "0daa41000000040000f8086855"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x09",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "00 93",
+        "raw": "0aaa46000001020093b955"
+      },
+      "stm32": {
+        "resp": "0x41",
+        "plen": 4,
+        "payload": "00 00 f8 08",
+        "raw": "0daa41000000040000f8086855"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x0A",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "00 93",
+        "raw": "0aaa46000001020093b955"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x0B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x0C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x0D",
+      "real": {
+        "resp": "0x4E",
+        "plen": 3,
+        "payload": "02 00 08",
+        "raw": "0baa4e00000103020008e255"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x0E",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x0F",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x10",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x11",
+      "real": {
+        "resp": "0x10",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "05aa1033316d025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x12",
+      "real": {
+        "resp": "0x50",
+        "plen": 2,
+        "payload": "00 08",
+        "raw": "0aaa50000001020008a955"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x13",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x10",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa10000000003255"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x14",
+      "real": {
+        "resp": "0x4A",
+        "plen": 3,
+        "payload": "f6 00 fd",
+        "raw": "0baa4a00000103f600fdd755"
+      },
+      "stm32": {
+        "resp": "0x4B",
+        "plen": 4,
+        "payload": "10 00 00 0a",
+        "raw": "0daa4b000000041000000a8e55"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x15",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "00 93",
+        "raw": "0aaa46000001020093b955"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x16",
+      "real": {
+        "resp": "0x4B",
+        "plen": 4,
+        "payload": "bd 00 00 0a",
+        "raw": "0caa4b00000104bd00000a3055"
+      },
+      "stm32": {
+        "resp": "0x52",
+        "plen": 3,
+        "payload": "00 00 02",
+        "raw": "0caa5200000003000002f955"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x17",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "00 93",
+        "raw": "0aaa46000001020093b955"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x18",
+      "real": {
+        "resp": "0x4C",
+        "plen": 3,
+        "payload": "79 00 fd",
+        "raw": "0baa4c000001037900fd6e55"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x19",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "00 93",
+        "raw": "0aaa46000001020093b955"
+      },
+      "stm32": {
+        "resp": "0x51",
+        "plen": 3,
+        "payload": "00 00 02",
+        "raw": "0caa5100000003000002cc55"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1A",
+      "real": {
+        "resp": "0x51",
+        "plen": 3,
+        "payload": "55 00 01",
+        "raw": "0baa5100000103550001bc55"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1B",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1C",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1D",
+      "real": {
+        "resp": "0x52",
+        "plen": 3,
+        "payload": "55 00 01",
+        "raw": "0baa5200000103550001c955"
+      },
+      "stm32": {
+        "resp": "0x40",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa4000000000c855"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1E",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x41",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa4100000000aa55"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1F",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x22",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa2200000000a055"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x20",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x21",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x42",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa42000000000c55"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x22",
+      "real": {
+        "resp": "0x22",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "05aa22000408025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x23",
+      "real": {
+        "resp": "0x53",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "raw": "0baa5300000103c20000dd55"
+      },
+      "stm32": {
+        "resp": "0x24",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa2400000000eb55"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x24",
+      "real": {
+        "resp": "0x24",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "raw": "04aa2402000103c20000dd55"
+      },
+      "stm32": {
+        "resp": "0x22",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa2200000000a055"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x25",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x24",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa2400000000eb55"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x26",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x27",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x28",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x29",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x30",
+      "real": {
+        "resp": "0x30",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "raw": "04aa3002000103c20000dd55"
+      },
+      "stm32": {
+        "resp": "0x30",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa30000000005655"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x31",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x32",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x33",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x34",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x35",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x36",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x37",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x38",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x39",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x40",
+      "real": {
+        "resp": "0x40",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "raw": "05aa4000000003c20000dd55"
+      },
+      "stm32": {
+        "resp": "0x40",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa4000000000c855"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x41",
+      "real": {
+        "resp": "0x41",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "raw": "05aa4100000003c20000dd55"
+      },
+      "stm32": {
+        "resp": "0x41",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa4100000000aa55"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x42",
+      "real": {
+        "resp": "0x42",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "raw": "05aa4200000003c20000dd55"
+      },
+      "stm32": {
+        "resp": "0x42",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa42000000000c55"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x43",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x44",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x45",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x46",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x47",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x48",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x49",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x50",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x51",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x52",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x53",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x54",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x55",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x56",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x57",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x58",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x59",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x60",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x61",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x62",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x63",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x64",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x65",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x66",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x67",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x68",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x69",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x70",
+      "real": {
+        "resp": "0x60",
+        "plen": 170,
+        "payload": "61 00 04 08 aa 62 00 00 00 00 00 00 00 3e 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 57 55 00 00 00 00 00 0d 21 fb cf 0b b8 f6 53 8c 5d 7a f5 f9 59 d5 c5 17",
+        "raw": "0caa60000408aa61000408aa62000000000000003e55000000000000000000000000000000000000575500000000000d21fbcf0bb8f6538c5d7af5f959d5c517"
+      },
+      "stm32": {
+        "resp": "0x60",
+        "plen": 36,
+        "payload": "61 00 04 08 aa 62 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00 00 01 ff 00 00 00 07 05 01 02 40 00 00",
+        "raw": "2daa600000002461000408aa6201000000010902190001010080320904000001ff00000007050102400000ee55"
+      },
+      "match": true,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x71",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x72",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x73",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x74",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x75",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x76",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x77",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x78",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x79",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    }
+  ],
+  "mismatches": [
+    {
+      "cmd": "0x00",
+      "real": {
+        "resp": "0x40",
+        "plen": 3,
+        "payload": "55 00 08",
+        "raw": "0baa4000000103550008a355"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x02",
+      "real": {
+        "resp": "0x41",
+        "plen": 4,
+        "payload": "00 00 00 08",
+        "raw": "0caa410000010400000008f555"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x08",
+      "real": {
+        "resp": "0x42",
+        "plen": 3,
+        "payload": "02 00 08",
+        "raw": "0baa42000001030200087d55"
+      },
+      "stm32": {
+        "resp": "0x41",
+        "plen": 4,
+        "payload": "00 00 f8 08",
+        "raw": "0daa41000000040000f8086855"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x09",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "00 93",
+        "raw": "0aaa46000001020093b955"
+      },
+      "stm32": {
+        "resp": "0x41",
+        "plen": 4,
+        "payload": "00 00 f8 08",
+        "raw": "0daa41000000040000f8086855"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x0B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x0C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x0D",
+      "real": {
+        "resp": "0x4E",
+        "plen": 3,
+        "payload": "02 00 08",
+        "raw": "0baa4e00000103020008e255"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x11",
+      "real": {
+        "resp": "0x10",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "05aa1033316d025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x12",
+      "real": {
+        "resp": "0x50",
+        "plen": 2,
+        "payload": "00 08",
+        "raw": "0aaa50000001020008a955"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x13",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x10",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa10000000003255"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x14",
+      "real": {
+        "resp": "0x4A",
+        "plen": 3,
+        "payload": "f6 00 fd",
+        "raw": "0baa4a00000103f600fdd755"
+      },
+      "stm32": {
+        "resp": "0x4B",
+        "plen": 4,
+        "payload": "10 00 00 0a",
+        "raw": "0daa4b000000041000000a8e55"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x16",
+      "real": {
+        "resp": "0x4B",
+        "plen": 4,
+        "payload": "bd 00 00 0a",
+        "raw": "0caa4b00000104bd00000a3055"
+      },
+      "stm32": {
+        "resp": "0x52",
+        "plen": 3,
+        "payload": "00 00 02",
+        "raw": "0caa5200000003000002f955"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x18",
+      "real": {
+        "resp": "0x4C",
+        "plen": 3,
+        "payload": "79 00 fd",
+        "raw": "0baa4c000001037900fd6e55"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x19",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "00 93",
+        "raw": "0aaa46000001020093b955"
+      },
+      "stm32": {
+        "resp": "0x51",
+        "plen": 3,
+        "payload": "00 00 02",
+        "raw": "0caa5100000003000002cc55"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1A",
+      "real": {
+        "resp": "0x51",
+        "plen": 3,
+        "payload": "55 00 01",
+        "raw": "0baa5100000103550001bc55"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1D",
+      "real": {
+        "resp": "0x52",
+        "plen": 3,
+        "payload": "55 00 01",
+        "raw": "0baa5200000103550001c955"
+      },
+      "stm32": {
+        "resp": "0x40",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa4000000000c855"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1E",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x41",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa4100000000aa55"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x1F",
+      "real": {
+        "resp": "0x46",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "0aaa46000001025593f455"
+      },
+      "stm32": {
+        "resp": "0x22",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa2200000000a055"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x21",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x42",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa42000000000c55"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x22",
+      "real": {
+        "resp": "0x22",
+        "plen": 2,
+        "payload": "55 93",
+        "raw": "05aa22000408025593f455"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x23",
+      "real": {
+        "resp": "0x53",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "raw": "0baa5300000103c20000dd55"
+      },
+      "stm32": {
+        "resp": "0x24",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa2400000000eb55"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x24",
+      "real": {
+        "resp": "0x24",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "raw": "04aa2402000103c20000dd55"
+      },
+      "stm32": {
+        "resp": "0x22",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa2200000000a055"
+      },
+      "match": false,
+      "payload_match": false
+    },
+    {
+      "cmd": "0x25",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x24",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa2400000000eb55"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x26",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x27",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x28",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x29",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x2F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x31",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x32",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x33",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x34",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x35",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x36",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x37",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x38",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x39",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x3F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x43",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x44",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x45",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x46",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x47",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x48",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x49",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x4F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x50",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x51",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x52",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x53",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x54",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x55",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x56",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x57",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x58",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x59",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x5F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x60",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x61",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x62",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x63",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x64",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x65",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x66",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x67",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x68",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x69",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x6F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x71",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x72",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x73",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x74",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x75",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x76",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x77",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x78",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x79",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7A",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7B",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7C",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7D",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7E",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    },
+    {
+      "cmd": "0x7F",
+      "real": {
+        "resp": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "plen": 0,
+        "payload": "",
+        "raw": "09aa46000000008355"
+      },
+      "match": false,
+      "payload_match": true
+    }
+  ]
+}

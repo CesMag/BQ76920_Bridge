@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-03-31T23:59:15.362620",
+  "python_bits": 64,
+  "devices": [
+    {
+      "path": "\\\\?\\hid#vid_0451&pid_0036#6&2cb02d24&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}",
+      "vid": "0x0451",
+      "pid": "0x0036",
+      "bcdDevice": "0x0002",
+      "serial": "HPA02 FW:2.0a/TUSB3210:0",
+      "product": "EV2300A",
+      "manufacturer": "Texas Inst",
+      "manufacturer_len": 10,
+      "caps": {
+        "usage": "0x00A5",
+        "usage_page": "0xFFA0",
+        "input_report_length": 65,
+        "output_report_length": 65,
+        "feature_report_length": 0
+      },
+      "identity": "REAL_EV2300"
+    },
+    {
+      "path": "\\\\?\\hid#vid_0451&pid_0036#6&264642fb&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}",
+      "vid": "0x0451",
+      "pid": "0x0036",
+      "bcdDevice": "0x0200",
+      "serial": "358635653433",
+      "product": "EV2300A",
+      "manufacturer": "Texas Instruments",
+      "manufacturer_len": 17,
+      "caps": {
+        "usage": "0x00A5",
+        "usage_page": "0xFFA0",
+        "input_report_length": 65,
+        "output_report_length": 65,
+        "feature_report_length": 0
+      },
+      "identity": "STM32_BRIDGE"
+    }
+  ]
+}
