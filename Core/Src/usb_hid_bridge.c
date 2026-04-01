@@ -54,6 +54,7 @@ static PendingWrite_t pendingWrite;
 static uint8_t EV2300_CRC8(const uint8_t *data, uint8_t len);
 static void EV2300_BuildRawResponse(uint8_t respCode,
                                      const uint8_t *payload, uint8_t payloadLen);
+static void EV2300_BuildErrorResponse(void);
 static void EV2300_SendResponse(void);
 static void Handle_ReadByte(uint16_t addr, uint8_t reg);
 static void Handle_ReadWord(uint16_t addr, uint8_t reg);
@@ -95,7 +96,7 @@ void Bridge_ProcessCommand(void)
 
   if (marker != EV2300_FRAME_MARKER)
   {
-    EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
+    EV2300_BuildErrorResponse();
     EV2300_SendResponse();
     cmdPending = 0U;
     return;
@@ -190,6 +191,17 @@ static void EV2300_BuildRawResponse(uint8_t respCode,
   rspBuffer[crcEnd + 1U] = EV2300_FRAME_END;
 }
 
+/**
+  * @brief  Build a standard error response (0x46 with 2-byte payload)
+  *         Real EV2300 always sends 0x46 with payload {0x00, 0x93}.
+  *         The DLLs parse this payload for error context.
+  */
+static void EV2300_BuildErrorResponse(void)
+{
+  static const uint8_t errPayload[2] = {0x00U, 0x93U};
+  EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U);
+}
+
 static void EV2300_SendResponse(void)
 {
   USBD_HID_SendReport(&hUsbDeviceFS, rspBuffer, BRIDGE_REPORT_SIZE);
@@ -213,7 +225,7 @@ static void Handle_ReadByte(uint16_t addr, uint8_t reg)
   }
   else
   {
-    EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
+    EV2300_BuildErrorResponse();
   }
   EV2300_SendResponse();
 }
@@ -234,7 +246,7 @@ static void Handle_ReadWord(uint16_t addr, uint8_t reg)
   }
   else
   {
-    EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
+    EV2300_BuildErrorResponse();
   }
   EV2300_SendResponse();
 }
@@ -260,7 +272,7 @@ static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
   }
   else
   {
-    EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
+    EV2300_BuildErrorResponse();
   }
   EV2300_SendResponse();
 }
@@ -274,7 +286,7 @@ static void Handle_WriteCommand(uint8_t cmd, const uint8_t *payload, uint8_t pay
 {
   if (payloadLen < 2U)
   {
-    EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
+    EV2300_BuildErrorResponse();
     EV2300_SendResponse();
     return;
   }
@@ -401,7 +413,7 @@ static void Handle_Submit(void)
   }
   else
   {
-    EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
+    EV2300_BuildErrorResponse();
   }
   EV2300_SendResponse();
 }
@@ -576,7 +588,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x1EU:
     case 0x1FU:
     case 0x20U:
-      EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
+      EV2300_BuildErrorResponse();
       EV2300_SendResponse();
       break;
 
