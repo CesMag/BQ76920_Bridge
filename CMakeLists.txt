@@ -67,3 +67,16 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 
     # Add user defined libraries
 )
+
+# ── Flash target (DFU over USB) ──────────────────────────────────────────────
+# Shows up in CMake sidebar under targets. Board must be in DFU mode first
+# (B0 to 3.3V, press RESET).
+add_custom_target(flash
+    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}>
+            ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.bin
+    COMMAND dfu-util -a 0 --dfuse-address 0x08000000:leave
+            -D ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.bin
+    DEPENDS ${CMAKE_PROJECT_NAME}
+    COMMENT "Flashing via DFU..."
+    VERBATIM
+)

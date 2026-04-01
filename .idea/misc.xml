@@ -4,4 +4,7 @@
     <option name="pythonIntegrationState" value="YES" />
   </component>
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
+  <component name="elmot.OpenOcdPlugin">
+    <option name="openOcdHome" value="/opt/homebrew" />
+  </component>
 </project>

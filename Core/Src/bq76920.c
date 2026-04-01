@@ -73,7 +73,7 @@ uint8_t BQ76920_CRC8(uint8_t *data, uint8_t len)
 /**
   * @brief  Read one register byte from the BQ76920
   * @note   Automatically uses CRC or non-CRC protocol based on bms->crcEnabled.
-  * @param  bms   Pointer to initialised BQ76920_t handle
+  * @param  bms   Pointer to initialized BQ76920_t handle
   * @param  reg   Register address
   * @param  data  Pointer to byte where the register value will be stored
   * @retval HAL_StatusTypeDef  HAL_OK on success, HAL_ERROR on NACK or CRC fail
@@ -128,7 +128,7 @@ HAL_StatusTypeDef BQ76920_ReadRegister(BQ76920_t *bms, uint8_t reg, uint8_t *dat
 /**
   * @brief  Write one register byte to the BQ76920
   * @note   Automatically uses CRC or non-CRC protocol based on bms->crcEnabled.
-  * @param  bms   Pointer to initialised BQ76920_t handle
+  * @param  bms   Pointer to initialized BQ76920_t handle
   * @param  reg   Register address
   * @param  data  Byte value to write
   * @retval HAL_StatusTypeDef  HAL_OK on success, HAL_ERROR on NACK

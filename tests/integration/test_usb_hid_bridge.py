@@ -1,283 +1,247 @@
 #!/usr/bin/env python3
 """
-USB HID integration tests for the BQ76920_Bridge firmware.
+USB HID integration tests for the BQ76920_Bridge firmware (EV2300 emulation).
 
-Prerequisites:
-  - Firmware must be flashed to the STM32F405 Feather
-  - Device must be connected via USB
-  - pip install hidapi
+Uses the EV2300 packet protocol to communicate with the bridge device.
 
 Usage:
-  python3 tests/integration/test_usb_hid_bridge.py
-
-These tests send real USB HID reports to the device and verify responses.
-The ECHO and VERSION commands work without a BQ76920 connected.
-Register read/write commands require the BQ76920 EVM wired to I2C1.
+    python3 tests/integration/test_usb_hid_bridge.py
 """
 import sys
-import time
 import struct
+import time
 
 try:
     import hid
 except ImportError:
-    print("ERROR: hidapi not installed. Run: pip install hidapi")
+    print("ERROR: pip install hidapi")
     sys.exit(1)
 
-# Bridge device identifiers (STMicro defaults)
-VID = 0x0483
-PID = 0x572B
-
-# Command IDs (must match usb_hid_bridge.h)
-CMD_READ_REG     = 0x01
-CMD_WRITE_REG    = 0x02
-CMD_READ_BLOCK   = 0x03
-CMD_WRITE_BLOCK  = 0x04
-CMD_INIT_DEVICE  = 0x10
-CMD_GET_STATUS   = 0x11
-CMD_GET_VOLTAGES = 0x12
-CMD_GET_CURRENT  = 0x13
-CMD_FET_CONTROL  = 0x14
-CMD_ECHO         = 0xFE
-CMD_VERSION      = 0xFF
-
-# Status codes
-STATUS_OK      = 0x00
-STATUS_I2C_ERR = 0x01
-STATUS_CRC_ERR = 0x02
-STATUS_BAD_CMD = 0x03
-
+# EV2300 identity (our firmware emulates this)
+VID = 0x0451
+PID = 0x0036
 REPORT_SIZE = 64
 
+# EV2300 protocol constants
+FRAME_MARKER = 0xAA
+FRAME_END    = 0x55
+RESP_FLAG    = 0x40
+CMD_READ_WORD  = 0x01
+CMD_READ_BLOCK = 0x02
+CMD_READ_BYTE  = 0x03
+CMD_WRITE_WORD = 0x04
+CMD_WRITE_BYTE = 0x07
+CMD_SUBMIT     = 0x80
+CMD_ERROR      = 0x46
 
-class BridgeDevice:
-    """Wrapper for USB HID communication with the BQ76920 bridge."""
+# BQ76920 default I2C address (7-bit, no CRC)
+BQ_ADDR = 0x08
 
+
+def crc8(data):
+    crc = 0x00
+    for b in data:
+        crc ^= b
+        for _ in range(8):
+            crc = ((crc << 1) ^ 0x07) & 0xFF if crc & 0x80 else (crc << 1) & 0xFF
+    return crc
+
+
+def build_packet(cmd, i2c_addr=0, reg=0, data=b""):
+    buf = bytearray(REPORT_SIZE)
+    if cmd == CMD_SUBMIT:
+        buf[0] = 8
+        buf[1] = FRAME_MARKER
+        buf[2] = CMD_SUBMIT
+        buf[6] = 0
+        buf[7] = crc8(buf[2:7])
+        buf[8] = FRAME_END
+        return buf
+
+    payload = bytearray()
+    payload.append(i2c_addr << 1)
+    payload.append(reg)
+    payload.extend(data)
+
+    plen = len(payload)
+    buf[0] = 2 + 1 + 3 + 1 + plen + 1 + 1
+    buf[1] = FRAME_MARKER
+    buf[2] = cmd
+    buf[6] = plen
+    buf[7:7 + plen] = payload
+
+    crc_end = 7 + plen
+    buf[crc_end] = crc8(buf[2:crc_end])
+    buf[crc_end + 1] = FRAME_END
+    return buf
+
+
+def parse_response(raw):
+    if raw is None or len(raw) < 8:
+        return {"ok": False, "error": True, "status_text": "Response too short"}
+    cmd = raw[2]
+    success = bool(cmd & RESP_FLAG) and cmd != CMD_ERROR
+    plen = raw[6] if len(raw) > 6 else 0
+    payload = bytes(raw[7:7 + plen]) if plen > 0 else b""
+    return {"ok": success, "cmd": cmd, "payload": payload, "raw": bytes(raw)}
+
+
+class EV2300Bridge:
     def __init__(self):
         self.dev = hid.device()
 
     def open(self):
-        """Open the bridge device. Raises IOError if not found."""
         self.dev.open(VID, PID)
         self.dev.set_nonblocking(0)
-        print(f"Opened: {self.dev.get_manufacturer_string()} "
-              f"- {self.dev.get_product_string()}")
 
     def close(self):
         self.dev.close()
 
-    def send_command(self, cmd_id, reg_addr=0, data_len=0, data=b"", timeout_ms=2000):
-        """Send a command and wait for the response."""
-        # Build 64-byte report (prepend 0x00 report ID for hidapi)
-        report = bytes([0x00, cmd_id, reg_addr, data_len]) + data
-        report = report.ljust(REPORT_SIZE + 1, b"\x00")
+    def _send(self, pkt):
+        self.dev.write(bytes([0x00]) + bytes(pkt))
+        time.sleep(0.01)
+        resp = self.dev.read(REPORT_SIZE, 2000)
+        return parse_response(resp)
 
-        self.dev.write(report)
-        response = self.dev.read(REPORT_SIZE, timeout_ms)
+    def _send_with_submit(self, pkt):
+        # Phase 1: send command, read ack
+        self.dev.write(bytes([0x00]) + bytes(pkt))
+        time.sleep(0.01)
+        self.dev.read(REPORT_SIZE, 2000)  # discard write ack
 
-        if response is None or len(response) == 0:
-            raise TimeoutError(f"No response for command 0x{cmd_id:02X}")
+        # Phase 2: send SUBMIT, read final response
+        submit = build_packet(CMD_SUBMIT)
+        self.dev.write(bytes([0x00]) + bytes(submit))
+        time.sleep(0.01)
+        resp = self.dev.read(REPORT_SIZE, 2000)
+        return parse_response(resp)
 
-        return bytes(response)
+    def read_byte(self, addr, reg):
+        pkt = build_packet(CMD_READ_BYTE, addr, reg)
+        resp = self._send(pkt)
+        if resp["ok"] and len(resp.get("raw", b"")) > 8:
+            resp["value"] = resp["raw"][8]
+        else:
+            resp["value"] = None
+        return resp
 
+    def read_word(self, addr, reg):
+        pkt = build_packet(CMD_READ_WORD, addr, reg)
+        resp = self._send(pkt)
+        if resp["ok"] and len(resp.get("raw", b"")) >= 10:
+            resp["value"] = struct.unpack("<H", resp["raw"][8:10])[0]
+        else:
+            resp["value"] = None
+        return resp
 
-def find_device():
-    """Check if the bridge device is connected."""
-    devices = hid.enumerate(VID, PID)
-    if not devices:
-        return None
-    return devices[0]
-
-
-# ---- Test functions --------------------------------------------------------
-
-def test_echo(bridge):
-    """Send ECHO command, verify loopback."""
-    payload = bytes(range(64))
-    # ECHO: entire request is echoed back
-    report = bytes([0x00, CMD_ECHO]) + payload[:62]
-    report = report.ljust(REPORT_SIZE + 1, b"\x00")
-    bridge.dev.write(report)
-
-    resp = bridge.dev.read(REPORT_SIZE, 2000)
-    assert resp is not None and len(resp) > 0, "No ECHO response"
-
-    # First byte of response should be CMD_ECHO
-    assert resp[0] == CMD_ECHO, f"Expected CMD_ECHO (0xFE), got 0x{resp[0]:02X}"
-    print("  ECHO: PASS")
-
-
-def test_version(bridge):
-    """Request firmware version string."""
-    resp = bridge.send_command(CMD_VERSION)
-    assert resp[0] == CMD_VERSION, "Wrong command echo"
-    assert resp[1] == STATUS_OK, f"Status error: 0x{resp[1]:02X}"
-
-    str_len = resp[2]
-    version = resp[3:3 + str_len].decode("ascii", errors="replace")
-    print(f"  VERSION: \"{version}\" (len={str_len})")
-    assert "BQ76920_Bridge" in version, f"Unexpected version: {version}"
-    print("  VERSION: PASS")
+    def write_byte(self, addr, reg, val):
+        pkt = build_packet(CMD_WRITE_BYTE, addr, reg, bytes([val & 0xFF]))
+        return self._send_with_submit(pkt)
 
 
-def test_bad_command(bridge):
-    """Send invalid command ID, expect BAD_CMD status."""
-    resp = bridge.send_command(0x99)
-    assert resp[0] == 0x99, "Wrong command echo"
-    assert resp[1] == STATUS_BAD_CMD, f"Expected BAD_CMD, got 0x{resp[1]:02X}"
-    print("  BAD_CMD: PASS")
+passed = 0
+failed = 0
 
 
-def test_read_register(bridge, reg_addr, reg_name=""):
-    """Read a single register (requires BQ76920 connected)."""
-    resp = bridge.send_command(CMD_READ_REG, reg_addr=reg_addr)
-    status = resp[1]
-    value = resp[3]
-    label = f"0x{reg_addr:02X}" + (f" ({reg_name})" if reg_name else "")
-    if status == STATUS_OK:
-        print(f"  READ_REG {label} = 0x{value:02X}: PASS")
+def check(name, condition, detail=""):
+    global passed, failed
+    if condition:
+        print(f"  PASS  {name}" + (f" -- {detail}" if detail else ""))
+        passed += 1
     else:
-        print(f"  READ_REG {label}: I2C ERROR (status=0x{status:02X})")
-    return status, value
+        print(f"  FAIL  {name}" + (f" -- {detail}" if detail else ""))
+        failed += 1
 
-
-def test_init_device(bridge):
-    """Run INIT_DEVICE and report GAIN/OFFSET."""
-    resp = bridge.send_command(CMD_INIT_DEVICE)
-    status = resp[1]
-    if status == STATUS_OK:
-        gain = resp[3] | (resp[4] << 8)
-        offset = struct.unpack("b", bytes([resp[5]]))[0]
-        ncells = resp[6]
-        print(f"  INIT_DEVICE: GAIN={gain} uV/LSB, OFFSET={offset} mV, "
-              f"cells={ncells}: PASS")
-    else:
-        print(f"  INIT_DEVICE: I2C ERROR (status=0x{status:02X})")
-    return status
-
-
-def test_get_voltages(bridge, ncells=5):
-    """Read all cell voltages + pack voltage."""
-    resp = bridge.send_command(CMD_GET_VOLTAGES)
-    status = resp[1]
-    if status != STATUS_OK:
-        print(f"  GET_VOLTAGES: I2C ERROR (status=0x{status:02X})")
-        return status
-
-    data_len = resp[2]
-    print(f"  GET_VOLTAGES ({data_len} bytes):")
-
-    for i in range(ncells):
-        v = struct.unpack_from("<f", resp, 3 + i * 4)[0]
-        print(f"    Cell {i+1}: {v:.3f} V")
-
-    vpack = struct.unpack_from("<f", resp, 3 + ncells * 4)[0]
-    print(f"    Pack:   {vpack:.3f} V")
-    print("  GET_VOLTAGES: PASS")
-    return status
-
-
-def test_get_current(bridge):
-    """Read coulomb counter / current."""
-    resp = bridge.send_command(CMD_GET_CURRENT)
-    status = resp[1]
-    if status != STATUS_OK:
-        print(f"  GET_CURRENT: I2C ERROR (status=0x{status:02X})")
-        return status
-
-    current = struct.unpack_from("<f", resp, 3)[0]
-    print(f"  GET_CURRENT: {current:.1f} mA: PASS")
-    return status
-
-
-# ---- Main ------------------------------------------------------------------
 
 def main():
+    global passed, failed
+
     print("=" * 60)
-    print("BQ76920_Bridge USB HID Integration Tests")
+    print("BQ76920_Bridge EV2300 Protocol Integration Tests")
     print("=" * 60)
 
-    # Check device presence
-    info = find_device()
-    if info is None:
+    # Find device
+    devices = hid.enumerate(VID, PID)
+    if not devices:
         print(f"\nDevice not found (VID=0x{VID:04X}, PID=0x{PID:04X}).")
-        print("Is the firmware flashed and the device plugged in?")
-        print("\nListing all HID devices:")
+        print("Is the firmware flashed?")
+        print("\nAll HID devices:")
         for d in hid.enumerate():
-            if d["vendor_id"] != 0:
-                print(f"  VID=0x{d['vendor_id']:04X} "
-                      f"PID=0x{d['product_id']:04X} "
-                      f"\"{d['product_string']}\"")
+            if d["vendor_id"]:
+                print(f"  VID=0x{d['vendor_id']:04X} PID=0x{d['product_id']:04X} "
+                      f'"{d["product_string"]}"')
         sys.exit(1)
 
-    print(f"\nDevice found: {info['product_string']}")
-    print(f"  Path: {info['path'].decode()}")
-    print()
+    print(f"\nDevice: {devices[0]['product_string']}")
+    b = EV2300Bridge()
+    b.open()
 
-    bridge = BridgeDevice()
-    bridge.open()
+    # --- Protocol tests (no BQ76920 needed) ---
+    print("\n--- EV2300 packet format tests ---")
 
-    passed = 0
-    failed = 0
+    # Bad marker should return error
+    bad_pkt = bytearray(REPORT_SIZE)
+    bad_pkt[1] = 0x00  # wrong marker
+    bad_pkt[2] = CMD_READ_BYTE
+    b.dev.write(bytes([0x00]) + bytes(bad_pkt))
+    time.sleep(0.01)
+    resp = b.dev.read(REPORT_SIZE, 2000)
+    r = parse_response(resp)
+    check("Bad marker returns error", r["cmd"] == CMD_ERROR)
 
-    # ---- Tests that work without BQ76920 hardware ----
-    print("--- No-hardware tests ---")
-    try:
-        test_echo(bridge)
-        passed += 1
-    except Exception as e:
-        print(f"  ECHO: FAIL ({e})")
-        failed += 1
+    # --- BQ76920 I2C tests ---
+    print("\n--- BQ76920 register tests ---")
 
-    try:
-        test_version(bridge)
-        passed += 1
-    except Exception as e:
-        print(f"  VERSION: FAIL ({e})")
-        failed += 1
-
-    try:
-        test_bad_command(bridge)
-        passed += 1
-    except Exception as e:
-        print(f"  BAD_CMD: FAIL ({e})")
-        failed += 1
-
-    # ---- Tests that require BQ76920 on I2C bus ----
-    print("\n--- BQ76920 I2C tests (require EVM connected) ---")
-
-    st = test_init_device(bridge)
-    if st == STATUS_OK:
-        passed += 1
-
-        # Read CC_CFG -- should be 0x19 after init
-        st2, val = test_read_register(bridge, 0x0B, "CC_CFG")
-        if st2 == STATUS_OK:
-            if val == 0x19:
-                passed += 1
-            else:
-                print(f"    WARNING: CC_CFG = 0x{val:02X}, expected 0x19")
-                failed += 1
-        else:
-            failed += 1
-
-        test_get_voltages(bridge)
-        passed += 1
-
-        test_get_current(bridge)
-        passed += 1
+    # Read CC_CFG (should be 0x19 after init)
+    r = b.read_byte(BQ_ADDR, 0x0B)
+    if r["ok"]:
+        check("READ_BYTE CC_CFG", r["value"] == 0x19,
+              f"0x{r['value']:02X}")
     else:
-        print("  (Skipping register tests -- no BQ76920 detected)")
+        check("READ_BYTE CC_CFG", False, "I2C error")
+        print("  (BQ76920 not detected -- skipping remaining I2C tests)")
+        b.close()
+        print(f"\nResults: {passed}/{passed + failed} passed")
+        sys.exit(0 if failed == 0 else 1)
 
-    bridge.close()
+    # Read SYS_CTRL1 (ADC_EN should be set)
+    r = b.read_byte(BQ_ADDR, 0x04)
+    check("READ_BYTE SYS_CTRL1 ADC_EN", r["ok"] and (r["value"] & 0x10),
+          f"0x{r['value']:02X}" if r["ok"] else "err")
 
-    # Summary
+    # Read word: VC1_HI/LO (cell 1 voltage)
+    r = b.read_word(BQ_ADDR, 0x0C)
+    check("READ_WORD VC1", r["ok"] and r["value"] is not None,
+          f"raw=0x{r['value']:04X}" if r["ok"] else "err")
+
+    # Read word: BAT_HI/LO (pack voltage)
+    r = b.read_word(BQ_ADDR, 0x2A)
+    check("READ_WORD BAT", r["ok"] and r["value"] is not None,
+          f"raw=0x{r['value']:04X}" if r["ok"] else "err")
+
+    # Write/readback test: OV_TRIP
+    r_orig = b.read_byte(BQ_ADDR, 0x09)
+    if r_orig["ok"]:
+        orig = r_orig["value"]
+        test_val = 0xAA if orig != 0xAA else 0x55
+        w = b.write_byte(BQ_ADDR, 0x09, test_val)
+        check("WRITE_BYTE OV_TRIP", w["ok"])
+
+        r_back = b.read_byte(BQ_ADDR, 0x09)
+        check("OV_TRIP readback matches",
+              r_back["ok"] and r_back["value"] == test_val,
+              f"wrote 0x{test_val:02X}, read 0x{r_back['value']:02X}" if r_back["ok"] else "err")
+
+        # Restore
+        b.write_byte(BQ_ADDR, 0x09, orig)
+
+    b.close()
+
     print()
     print("=" * 60)
     total = passed + failed
     print(f"Results: {passed}/{total} passed, {failed} failed")
     print("=" * 60)
-
     sys.exit(0 if failed == 0 else 1)
 
 
