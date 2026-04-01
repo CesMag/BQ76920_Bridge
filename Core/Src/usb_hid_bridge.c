@@ -458,17 +458,24 @@ static void Handle_Undocumented(uint8_t cmd)
   switch (cmd)
   {
     /* ── Full sweep (2026-04-01) proved the real EV2300 TIMES OUT on
-       ALL undocumented commands sent without I2C payload context.
-       Every command 0x00-0x7F (except the core I2C ops 0x01-0x07
-       and SUBMIT 0x80) returns NO RESPONSE when sent bare.
+       ALL undocumented commands sent WITHOUT payload (bare).
+       However, when sent WITH payload (by bq76940.exe during init),
+       some commands need responses.
 
-       The previous approach of returning specific response codes for
-       undocumented commands was based on a desynced capture. The clean
-       sweep with proper flushing shows they all timeout.
+       Strategy: the plen==0 guard in Bridge_ProcessCommand() already
+       routes bare commands here (which returns nothing). Commands
+       that reach here WITH payload need proper responses. ────────── */
 
-       The ONLY exception is CMD 0x70 which returns device info. ──── */
+    /* 0x0D -> 0x4E (I2C power/bus control -- bq76940.exe sends this) */
+    case 0x0DU:
+    {
+      uint8_t p[3] = {0x02U, 0x00U, 0x08U};
+      EV2300_BuildRawResponse(0x4EU, p, 3U);
+      EV2300_SendResponse();
+      break;
+    }
 
-    /* 0x70 -> 0x60 with USB descriptor dump (confirmed by sweep) */
+    /* 0x70 -> 0x60 with USB descriptor dump */
     case 0x70U:
     {
       static const uint8_t desc[] = {
@@ -483,9 +490,10 @@ static void Handle_Undocumented(uint8_t cmd)
       break;
     }
 
-    /* ── ALL other commands: NO RESPONSE (match real EV2300 behavior) ─ */
-    /* Full sweep with flush-per-command confirmed the real EV2300
-       simply ignores every undocumented command. No exceptions. */
+    /* ── All other undocumented commands: NO RESPONSE ─────────────── */
+    /* Bare commands (plen=0) are already caught by the guard above.
+       Commands with payload that aren't in this switch also get no
+       response, matching the real EV2300's behavior for unknown ops. */
     default:
       break;
   }
