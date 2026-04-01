@@ -389,9 +389,8 @@ static void Get_SerialNum(void)
 {
   /* EV2300-format serial: "HPA02 FW:2.0a/TUSB3210:0"
    * The TI DLL chain (bq80xusb.dll GetFreeBoardsEV2300A) parses
-   * this string to identify EV2300A adapters.
-   * Using "b" instead of "a" to distinguish from real hardware. */
-  static const char serial[] = "HPA02 FW:2.0b/TUSB3210:0";
+   * this string to identify EV2300A adapters. Must match exactly. */
+  static const char serial[] = "HPA02 FW:2.0a/TUSB3210:0";
   uint8_t idx;
 
   for (idx = 0U; serial[idx] != '\0'; idx++)
