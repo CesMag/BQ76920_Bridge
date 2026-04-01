@@ -114,6 +114,16 @@ void Bridge_ProcessCommand(void)
     }
   }
 
+  /* Real EV2300 ignores I2C commands with no payload (full sweep confirmed).
+   * Only process read/write if we have at least an I2C address byte. */
+  if (plen == 0U && cmd != EV2300_CMD_SUBMIT && cmd != 0x70U)
+  {
+    /* No payload = no I2C address. Real EV2300 does not respond. */
+    Handle_Undocumented(cmd);
+    cmdPending = 0U;
+    return;
+  }
+
   switch (cmd)
   {
     case EV2300_CMD_READ_WORD:  /* 0x01 -> resp 0x41 */
@@ -447,131 +457,18 @@ static void Handle_Undocumented(uint8_t cmd)
 {
   switch (cmd)
   {
-    /* ── Commands with specific non-error responses (from diff) ─────── */
+    /* ── Full sweep (2026-04-01) proved the real EV2300 TIMES OUT on
+       ALL undocumented commands sent without I2C payload context.
+       Every command 0x00-0x7F (except the core I2C ops 0x01-0x07
+       and SUBMIT 0x80) returns NO RESPONSE when sent bare.
 
-    /* 0x00 -> 0x40 */
-    case 0x00U:
-      EV2300_BuildRawResponse(0x40U, NULL, 0U);
-      EV2300_SendResponse();
-      break;
+       The previous approach of returning specific response codes for
+       undocumented commands was based on a desynced capture. The clean
+       sweep with proper flushing shows they all timeout.
 
-    /* 0x08 -> 0x42 (diff confirmed; prior protocol scan had desync) */
-    case 0x08U:
-    {
-      uint8_t p[3] = {0x02U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x42U, p, 3U);
-      EV2300_SendResponse();
-      break;
-    }
+       The ONLY exception is CMD 0x70 which returns device info. ──── */
 
-    /* 0x0D -> 0x4E (I2C bus status) */
-    case 0x0DU:
-    {
-      uint8_t p[3] = {0x02U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x4EU, p, 3U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x11 -> 0x10 */
-    case 0x11U:
-      EV2300_BuildRawResponse(0x10U, NULL, 0U);
-      EV2300_SendResponse();
-      break;
-
-    /* 0x12 -> 0x50 */
-    case 0x12U:
-    {
-      uint8_t p[2] = {0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x50U, p, 2U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x14 -> 0x4A (diff shows 0x4A, not 0x4B) */
-    case 0x14U:
-    {
-      uint8_t p[3] = {0xF6U, 0x00U, 0xFDU};
-      EV2300_BuildRawResponse(0x4AU, p, 3U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x16 -> 0x4B */
-    case 0x16U:
-    {
-      uint8_t p[4] = {0xBDU, 0x00U, 0x00U, 0x0AU};
-      EV2300_BuildRawResponse(0x4BU, p, 4U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x18 -> 0x4C */
-    case 0x18U:
-    {
-      uint8_t p[3] = {0x79U, 0x00U, 0xFDU};
-      EV2300_BuildRawResponse(0x4CU, p, 3U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x1A -> 0x51 */
-    case 0x1AU:
-    {
-      uint8_t p[3] = {0x55U, 0x00U, 0x01U};
-      EV2300_BuildRawResponse(0x51U, p, 3U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x1D -> 0x52 */
-    case 0x1DU:
-    {
-      uint8_t p[3] = {0x55U, 0x00U, 0x01U};
-      EV2300_BuildRawResponse(0x52U, p, 3U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x22 -> 0x22 */
-    case 0x22U:
-      EV2300_BuildRawResponse(0x22U, NULL, 0U);
-      EV2300_SendResponse();
-      break;
-
-    /* 0x23 -> 0x53 */
-    case 0x23U:
-    {
-      uint8_t p[3] = {0xC2U, 0x00U, 0x00U};
-      EV2300_BuildRawResponse(0x53U, p, 3U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x24 -> 0x24 */
-    case 0x24U:
-    {
-      uint8_t p[3] = {0xC2U, 0x00U, 0x00U};
-      EV2300_BuildRawResponse(0x24U, p, 3U);
-      EV2300_SendResponse();
-      break;
-    }
-
-    /* 0x30 -> 0x30 (echo) */
-    case 0x30U:
-      EV2300_BuildRawResponse(0x30U, NULL, 0U);
-      EV2300_SendResponse();
-      break;
-
-    /* 0x40, 0x41, 0x42 -> echo back same code */
-    case 0x40U:
-    case 0x41U:
-    case 0x42U:
-      EV2300_BuildRawResponse(cmd, NULL, 0U);
-      EV2300_SendResponse();
-      break;
-
-    /* 0x70 -> 0x60 with USB descriptor dump */
+    /* 0x70 -> 0x60 with USB descriptor dump (confirmed by sweep) */
     case 0x70U:
     {
       static const uint8_t desc[] = {
@@ -586,31 +483,10 @@ static void Handle_Undocumented(uint8_t cmd)
       break;
     }
 
-    /* ── Commands that return 0x46 ERROR on real EV2300 ─────────────── */
-    case 0x09U:
-    case 0x0EU:
-    case 0x0FU:
-    case 0x10U:
-    case 0x13U:
-    case 0x15U:
-    case 0x17U:
-    case 0x19U:
-    case 0x1BU:
-    case 0x1CU:
-    case 0x1EU:
-    case 0x1FU:
-    case 0x20U:
-      EV2300_BuildErrorResponse();
-      EV2300_SendResponse();
-      break;
-
-    /* ── All other commands: NO RESPONSE (match real EV2300 timeout) ── */
-    /* The real EV2300 simply ignores unknown commands. The TI DLLs
-       distinguish "no response" (timeout) from "error response" (0x46).
-       Commands in this category: 0x0B, 0x0C, 0x21, 0x25-0x2F,
-       0x31-0x3F, 0x43-0x6F, 0x71-0x7F, and any others not listed. */
+    /* ── ALL other commands: NO RESPONSE (match real EV2300 behavior) ─ */
+    /* Full sweep with flush-per-command confirmed the real EV2300
+       simply ignores every undocumented command. No exceptions. */
     default:
-      /* Intentionally no response -- matches real EV2300 behavior */
       break;
   }
 }
