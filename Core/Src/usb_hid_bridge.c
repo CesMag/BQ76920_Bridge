@@ -367,7 +367,8 @@ static void Handle_Submit(void)
 
   if (pendingWrite.active == 0U)
   {
-    EV2300_BuildRawResponse(0xC0U, submitPayload, 3U);
+    /* Real EV2300 returns error when SUBMIT is sent with no pending write */
+    EV2300_BuildErrorResponse();
     EV2300_SendResponse();
     return;
   }
