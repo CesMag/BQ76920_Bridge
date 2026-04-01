@@ -1,0 +1,158 @@
+[
+  {
+    "test": "I2CPower(1)",
+    "cmd": "0x18",
+    "payload": "[0x01]",
+    "response": "TIMEOUT"
+  },
+  {
+    "test": "I2CPower(0)",
+    "cmd": "0x18",
+    "payload": "[0x00]",
+    "response": "TIMEOUT"
+  },
+  {
+    "test": "WRITE_BYTE",
+    "cmd": "0x07",
+    "payload": "[0x08,0x0B,0x19]",
+    "response": "TIMEOUT"
+  },
+  {
+    "test": "WRITE_WORD",
+    "cmd": "0x04",
+    "payload": "[0x08,0x0B,0x19,0x00]",
+    "response": "0c aa 70 00 19 00 aa 46 00 00 01 02 0b 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "WRITE_BLOCK",
+    "cmd": "0x05",
+    "payload": "[0x08,0x0A,0x02,0x55,0x66]",
+    "response": "0a 93 2e 55 aa 46 00 00 01 02 0a 02 0b 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "SEND_BYTE",
+    "cmd": "0x06",
+    "payload": "[0x08,0x0B]",
+    "response": "0a 93 3b 55 aa 46 00 00 01 02 0b 02 0b 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "EXT_WRITE",
+    "cmd": "0x1E",
+    "payload": "[0x10,0x0B,0x01,0x19]",
+    "response": "TIMEOUT"
+  },
+  {
+    "test": "SUBMIT_after_extwrite",
+    "cmd": "0x80",
+    "payload": "[]",
+    "response": "0a 93 2e 55 aa c0 00 00 01 03 33 02 0b 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "SEQ_WRITE_BYTE",
+    "cmd": "0x07",
+    "payload": "[0x08,0x0B,0x19]",
+    "response": "TIMEOUT"
+  },
+  {
+    "test": "SEQ_SUBMIT_after_WB",
+    "cmd": "0x80",
+    "payload": "[]",
+    "response": "0b 31 6d 8f 55 aa c0 00 00 01 03 33 0b 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "READ_WORD addr=0x08 reg=0x00",
+    "cmd": "0x01",
+    "payload": "[0x08,0x00]",
+    "response": "0b 31 6d 8f 55 aa 41 00 00 01 04 00 0b 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "READ_WORD addr=0x08 reg=0x0B",
+    "cmd": "0x01",
+    "payload": "[0x08,0x0B]",
+    "response": "0a 93 b9 55 aa 41 00 00 01 04 0b 02 00 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "READ_WORD addr=0x08 reg=0x04",
+    "cmd": "0x01",
+    "payload": "[0x08,0x04]",
+    "response": "0a 93 2e 55 aa 41 00 00 01 04 04 02 0b 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "READ_BYTE addr=0x08 reg=0x00",
+    "cmd": "0x03",
+    "payload": "[0x08,0x00]",
+    "response": "0a 93 ed 55 aa 46 00 00 01 02 00 02 04 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "READ_BYTE addr=0x08 reg=0x0B",
+    "cmd": "0x03",
+    "payload": "[0x08,0x0B]",
+    "response": "0a 93 b9 55 aa 46 00 00 01 02 0b 02 04 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "READ_BLOCK addr=0x08 reg=0x00 cnt=4",
+    "cmd": "0x02",
+    "payload": "[0x08,0x00,0x04]",
+    "response": "0a 93 2e 55 aa 42 00 00 01 03 02 02 04 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "READ_BLOCK addr=0x08 reg=0x04 cnt=8",
+    "cmd": "0x02",
+    "payload": "[0x08,0x04,0x08]",
+    "response": "0a 93 b9 55 aa 42 00 00 01 03 02 00 04 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "EXT_READ addr=0x10 reg=0x00 cnt=0x01",
+    "cmd": "0x1D",
+    "payload": "[0x10,0x00,0x01]",
+    "response": "0a 93 ed 55 aa 52 00 00 01 04 00 04 04 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "EXT_READ addr=0x10 reg=0x0B cnt=0x01",
+    "cmd": "0x1D",
+    "payload": "[0x10,0x0B,0x01]",
+    "response": "0c 01 84 00 42 55 aa 52 00 00 01 04 0b 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "EXT_READ addr=0x10 reg=0x04 cnt=0x08",
+    "cmd": "0x1D",
+    "payload": "[0x10,0x04,0x08]",
+    "response": "0c 01 19 00 c0 55 aa 52 00 00 01 0b 04 10 00 00 00 00 ac 97"
+  },
+  {
+    "test": "NULL",
+    "cmd": "0x00",
+    "payload": "[]",
+    "response": "13 08 10 00 00 00 00 ac 97 19 00 c3 55 aa 40 00 00 01 03 55"
+  },
+  {
+    "test": "I2C_STATUS",
+    "cmd": "0x0D",
+    "payload": "[]",
+    "response": "0a 93 f4 55 aa 4e 00 00 01 03 02 55 55 aa 40 00 00 01 03 55"
+  },
+  {
+    "test": "UNK_0E",
+    "cmd": "0x0E",
+    "payload": "[]",
+    "response": "0a 93 f4 55 aa 46 00 00 01 02 55 55 55 aa 40 00 00 01 03 55"
+  },
+  {
+    "test": "INT_STATUS",
+    "cmd": "0x11",
+    "payload": "[]",
+    "response": "0a 93 f4 55 aa 50 00 00 01 02 00 55 55 aa 40 00 00 01 03 55"
+  },
+  {
+    "test": "DEV_CFG",
+    "cmd": "0x14",
+    "payload": "[]",
+    "response": "0a 93 f4 55 aa 4b 00 00 01 04 bd 55 55 aa 40 00 00 01 03 55"
+  },
+  {
+    "test": "ECHO_PING",
+    "cmd": "0x30",
+    "payload": "[]",
+    "response": "TIMEOUT"
+  }
+]
