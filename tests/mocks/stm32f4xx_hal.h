@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#define I2C_MEMADD_SIZE_8BIT  1U
+
 /* HAL status type */
 typedef enum
 {
@@ -38,5 +40,26 @@ HAL_StatusTypeDef HAL_I2C_Master_Receive(I2C_HandleTypeDef *hi2c,
                                           uint8_t *pData,
                                           uint16_t Size,
                                           uint32_t Timeout);
+
+HAL_StatusTypeDef HAL_I2C_Mem_Read(I2C_HandleTypeDef *hi2c,
+                                    uint16_t DevAddress,
+                                    uint16_t MemAddress,
+                                    uint16_t MemAddSize,
+                                    uint8_t *pData,
+                                    uint16_t Size,
+                                    uint32_t Timeout);
+
+HAL_StatusTypeDef HAL_I2C_Mem_Write(I2C_HandleTypeDef *hi2c,
+                                     uint16_t DevAddress,
+                                     uint16_t MemAddress,
+                                     uint16_t MemAddSize,
+                                     uint8_t *pData,
+                                     uint16_t Size,
+                                     uint32_t Timeout);
+
+HAL_StatusTypeDef HAL_I2C_IsDeviceReady(I2C_HandleTypeDef *hi2c,
+                                         uint16_t DevAddress,
+                                         uint32_t Trials,
+                                         uint32_t Timeout);
 
 #endif /* STM32F4XX_HAL_H_MOCK */
