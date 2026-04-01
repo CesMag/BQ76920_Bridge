@@ -30,6 +30,10 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 #define MAX_WRITE_DATA  56U
 #define I2C_TIMEOUT     100U
 
+/* Debug command log: stores first 10 bytes of each received command */
+#define CMD_LOG_SIZE    32U
+#define CMD_LOG_BYTES   10U
+
 /* Private types -------------------------------------------------------------*/
 
 typedef struct
@@ -48,6 +52,11 @@ static volatile uint8_t cmdPending = 0U;
 static uint8_t cmdBuffer[BRIDGE_REPORT_SIZE];
 static uint8_t rspBuffer[BRIDGE_REPORT_SIZE];
 static PendingWrite_t pendingWrite;
+
+/* Debug ring buffer: log every command received */
+static uint8_t cmdLog[CMD_LOG_SIZE][CMD_LOG_BYTES];
+static uint8_t cmdLogIdx = 0U;
+static uint8_t cmdLogCount = 0U;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -91,9 +100,33 @@ void Bridge_ProcessCommand(void)
     return;
   }
 
+  /* Log first 10 bytes of every command for debug readout */
+  memcpy(cmdLog[cmdLogIdx], cmdBuffer, CMD_LOG_BYTES);
+  cmdLogIdx = (uint8_t)((cmdLogIdx + 1U) % CMD_LOG_SIZE);
+  if (cmdLogCount < CMD_LOG_SIZE) { cmdLogCount++; }
+
   uint8_t marker = cmdBuffer[1];
   uint8_t cmd    = cmdBuffer[2];
   uint8_t plen   = cmdBuffer[6];
+
+  /* Debug command 0xFE: dump command log */
+  if (marker == EV2300_FRAME_MARKER && cmd == 0xFEU)
+  {
+    memset(rspBuffer, 0, BRIDGE_REPORT_SIZE);
+    rspBuffer[0] = cmdLogCount;
+    /* Pack as many log entries as fit in 63 bytes: count(1) + entries(N*10) */
+    uint8_t start = (cmdLogCount >= CMD_LOG_SIZE)
+                    ? cmdLogIdx : 0U;
+    uint8_t n = (cmdLogCount < 6U) ? cmdLogCount : 6U; /* max 6 entries = 60 bytes */
+    for (uint8_t i = 0U; i < n; i++)
+    {
+      uint8_t idx = (uint8_t)((start + cmdLogCount - n + i) % CMD_LOG_SIZE);
+      memcpy(&rspBuffer[1U + i * CMD_LOG_BYTES], cmdLog[idx], CMD_LOG_BYTES);
+    }
+    EV2300_SendResponse();
+    cmdPending = 0U;
+    return;
+  }
 
   if (marker != EV2300_FRAME_MARKER)
   {
