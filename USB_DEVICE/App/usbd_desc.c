@@ -64,7 +64,7 @@
 
 #define USBD_VID     0x0451
 #define USBD_LANGID_STRING     1033
-#define USBD_MANUFACTURER_STRING     "Texas Instruments"
+#define USBD_MANUFACTURER_STRING     "Texas Inst"
 #define USBD_PID_FS     0x0036
 #define USBD_PRODUCT_STRING_FS     "EV2300A"
 #define USBD_CONFIGURATION_STRING_FS     "HID Config"
@@ -103,7 +103,6 @@
   */
 
 static void Get_SerialNum(void);
-static void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len);
 
 /**
   * @}
@@ -172,8 +171,8 @@ __ALIGN_BEGIN uint8_t USBD_FS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END =
   HIBYTE(USBD_VID),           /*idVendor*/
   LOBYTE(USBD_PID_FS),        /*idProduct*/
   HIBYTE(USBD_PID_FS),        /*idProduct*/
-  0x00,                       /*bcdDevice rel. 2.00*/
-  0x02,
+  0x02,                       /*bcdDevice rel. 0.02 (match real EV2300)*/
+  0x00,
   USBD_IDX_MFC_STR,           /*Index of manufacturer  string*/
   USBD_IDX_PRODUCT_STR,       /*Index of product string*/
   USBD_IDX_SERIAL_STR,        /*Index of serial number string*/
@@ -382,55 +381,26 @@ uint8_t * USBD_FS_USR_BOSDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
 
 /**
   * @brief  Create the serial number string descriptor
+  *         Uses EV2300-format serial so TI DLLs recognize the device.
   * @param  None
   * @retval None
   */
 static void Get_SerialNum(void)
 {
-  uint32_t deviceserial0;
-  uint32_t deviceserial1;
-  uint32_t deviceserial2;
+  /* EV2300-format serial: "HPA02 FW:2.0a/TUSB3210:0"
+   * The TI DLL chain (bq80xusb.dll GetFreeBoardsEV2300A) parses
+   * this string to identify EV2300A adapters.
+   * Using "b" instead of "a" to distinguish from real hardware. */
+  static const char serial[] = "HPA02 FW:2.0b/TUSB3210:0";
+  uint8_t idx;
 
-  deviceserial0 = *(uint32_t *) DEVICE_ID1;
-  deviceserial1 = *(uint32_t *) DEVICE_ID2;
-  deviceserial2 = *(uint32_t *) DEVICE_ID3;
-
-  deviceserial0 += deviceserial2;
-
-  if (deviceserial0 != 0)
+  for (idx = 0U; serial[idx] != '\0'; idx++)
   {
-    IntToUnicode(deviceserial0, &USBD_StringSerial[2], 8);
-    IntToUnicode(deviceserial1, &USBD_StringSerial[18], 4);
+    USBD_StringSerial[2U + (idx * 2U)] = (uint8_t)serial[idx];
+    USBD_StringSerial[3U + (idx * 2U)] = 0x00U;
   }
 }
 
-/**
-  * @brief  Convert Hex 32Bits value into char
-  * @param  value: value to convert
-  * @param  pbuf: pointer to the buffer
-  * @param  len: buffer length
-  * @retval None
-  */
-static void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len)
-{
-  uint8_t idx = 0;
-
-  for (idx = 0; idx < len; idx++)
-  {
-    if (((value >> 28)) < 0xA)
-    {
-      pbuf[2 * idx] = (value >> 28) + '0';
-    }
-    else
-    {
-      pbuf[2 * idx] = (value >> 28) + 'A' - 10;
-    }
-
-    value = value << 4;
-
-    pbuf[2 * idx + 1] = 0;
-  }
-}
 /**
   * @}
   */
