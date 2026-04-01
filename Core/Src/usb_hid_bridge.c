@@ -32,7 +32,7 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 
 /* Debug command log: stores first 10 bytes of each received command */
 #define CMD_LOG_SIZE    32U
-#define CMD_LOG_BYTES   10U
+#define CMD_LOG_BYTES   12U
 
 /* Private types -------------------------------------------------------------*/
 
@@ -113,15 +113,19 @@ void Bridge_ProcessCommand(void)
   if (marker == EV2300_FRAME_MARKER && cmd == 0xFEU)
   {
     memset(rspBuffer, 0, BRIDGE_REPORT_SIZE);
+    /* Page number in command payload byte[7], default 0 */
+    uint8_t page = (cmdBuffer[6] >= 1U) ? cmdBuffer[7] : 0U;
+    uint8_t start = (cmdLogCount >= CMD_LOG_SIZE) ? cmdLogIdx : 0U;
+    uint8_t skip = page * 6U;
     rspBuffer[0] = cmdLogCount;
-    /* Pack as many log entries as fit in 63 bytes: count(1) + entries(N*10) */
-    uint8_t start = (cmdLogCount >= CMD_LOG_SIZE)
-                    ? cmdLogIdx : 0U;
-    uint8_t n = (cmdLogCount < 6U) ? cmdLogCount : 6U; /* max 6 entries = 60 bytes */
+    rspBuffer[1] = page;
+    /* Pack 6 entries per page: header(2) + entries(6*10=60) = 62 bytes */
+    uint8_t avail = (cmdLogCount > skip) ? (uint8_t)(cmdLogCount - skip) : 0U;
+    uint8_t n = (avail < 6U) ? avail : 6U;
     for (uint8_t i = 0U; i < n; i++)
     {
-      uint8_t idx = (uint8_t)((start + cmdLogCount - n + i) % CMD_LOG_SIZE);
-      memcpy(&rspBuffer[1U + i * CMD_LOG_BYTES], cmdLog[idx], CMD_LOG_BYTES);
+      uint8_t idx = (uint8_t)((start + skip + i) % CMD_LOG_SIZE);
+      memcpy(&rspBuffer[2U + i * CMD_LOG_BYTES], cmdLog[idx], CMD_LOG_BYTES);
     }
     EV2300_SendResponse();
     cmdPending = 0U;

@@ -1,12 +1,8 @@
 #!/usr/bin/env python
 """
 Read the command log from STM32 firmware debug buffer.
-Sends CMD 0xFE to get the last N commands that bq76940.exe sent.
-
-Usage:
-  1. Open bq76940.exe, let it connect and fail
-  2. Close bq76940.exe
-  3. Run this script immediately (before any other tool opens the device)
+Sends CMD 0xFE to get the commands that bq76940.exe sent.
+Supports pagination (6 entries per page, 12 bytes each).
 """
 import ctypes
 import ctypes.wintypes as wt
@@ -16,6 +12,7 @@ import time
 BUF = 64
 TMO = 2000
 FILE_FLAG_OVERLAPPED = 0x40000000
+ENTRY_SIZE = 12
 
 STM_PATH = b"\\\\?\\hid#vid_0451&pid_0036#6&191bcf7d&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}"
 
@@ -36,6 +33,7 @@ CMD_NAMES = {
     0x00: "BARE_0x00", 0x01: "READ_WORD", 0x02: "READ_BLOCK", 0x03: "READ_BYTE",
     0x04: "WRITE_WORD", 0x05: "WRITE_BLOCK", 0x06: "SEND_BYTE", 0x07: "WRITE_BYTE",
     0x0D: "I2C_CFG", 0x0E: "I2C_STAT", 0x11: "INT_STAT", 0x14: "DEV_CFG",
+    0x1D: "FW_CTRL", 0x1E: "UNK_0x1E", 0x1F: "UNK_0x1F",
     0x70: "DEV_INFO", 0x80: "SUBMIT", 0xFE: "DEBUG_LOG",
 }
 
@@ -80,6 +78,29 @@ def build(cmd, payload=b""):
     return pkt
 
 
+def sr(h, e, pkt, tmo=TMO):
+    rpt = b"\x00" + bytes(pkt[:BUF]) + b"\x00" * (65 - 1 - BUF)
+    ol = OL(); ol.hE = e; k32.ResetEvent(e); w = wt.DWORD()
+    ok = k32.WriteFile(h, rpt, 65, ctypes.byref(w), ctypes.byref(ol))
+    if not ok and ctypes.GetLastError() == 997:
+        k32.WaitForSingleObject(e, 5000)
+        k32.GetOverlappedResult(h, ctypes.byref(ol), ctypes.byref(w), False)
+    buf2 = ctypes.create_string_buffer(65)
+    ol2 = OL(); ol2.hE = e; k32.ResetEvent(e); rn = wt.DWORD()
+    ok = k32.ReadFile(h, buf2, 65, ctypes.byref(rn), ctypes.byref(ol2))
+    if not ok:
+        if ctypes.GetLastError() == 997:
+            w2 = k32.WaitForSingleObject(e, tmo)
+            if w2 == 0:
+                k32.GetOverlappedResult(h, ctypes.byref(ol2), ctypes.byref(rn), False)
+                return buf2.raw[1:rn.value]
+            else:
+                k32.CancelIo(h)
+                return None
+        return None
+    return buf2.raw[1:rn.value]
+
+
 def main():
     print("Opening STM32 device...")
     h = k32.CreateFileA(STM_PATH, 0xC0000000, 3, None, 3, FILE_FLAG_OVERLAPPED, None)
@@ -92,62 +113,60 @@ def main():
     hid.HidD_FlushQueue(h)
     time.sleep(0.1)
 
-    # Send debug read command (0xFE) multiple times to get all entries
-    for page in range(6):
-        pkt = build(0xFE)
-        rpt = b"\x00" + bytes(pkt[:BUF]) + b"\x00" * (65 - 1 - BUF)
-        ol = OL(); ol.hE = e; k32.ResetEvent(e); w = wt.DWORD()
-        ok = k32.WriteFile(h, rpt, 65, ctypes.byref(w), ctypes.byref(ol))
-        if not ok and ctypes.GetLastError() == 997:
-            k32.WaitForSingleObject(e, 5000)
-            k32.GetOverlappedResult(h, ctypes.byref(ol), ctypes.byref(w), False)
+    all_entries = []
 
-        buf2 = ctypes.create_string_buffer(65)
-        ol2 = OL(); ol2.hE = e; k32.ResetEvent(e); rn = wt.DWORD()
-        ok = k32.ReadFile(h, buf2, 65, ctypes.byref(rn), ctypes.byref(ol2))
-        if not ok:
-            if ctypes.GetLastError() == 997:
-                w2 = k32.WaitForSingleObject(e, TMO)
-                if w2 == 0:
-                    k32.GetOverlappedResult(h, ctypes.byref(ol2), ctypes.byref(rn), False)
-                    raw = buf2.raw[1:rn.value]
-                else:
-                    k32.CancelIo(h)
-                    print("TIMEOUT reading debug log")
-                    break
-            else:
-                print(f"Read error: {ctypes.GetLastError()}")
-                break
-        else:
-            raw = buf2.raw[1:rn.value]
+    # Read pages until we have all entries
+    for page in range(6):
+        raw = sr(h, e, build(0xFE, bytes([page])))
+        if raw is None:
+            print("TIMEOUT reading debug log")
+            break
+
+        total_count = raw[0]
+        resp_page = raw[1]
 
         if page == 0:
-            total_count = raw[0]
             print(f"Total commands logged: {total_count}")
-            print(f"Showing last {min(total_count, 6)} entries:\n")
-            print(f"{'#':>3}  {'CMD':>4}  {'Name':<12}  {'plen':>4}  {'Raw bytes (first 10)'}")
-            print("-" * 70)
+            # Subtract the debug reads themselves
+            effective = total_count
+            print(f"(includes {page+1}+ debug reads)\n")
 
-            n = min(total_count, 6)
-            for i in range(n):
-                entry = raw[1 + i * 10 : 1 + (i + 1) * 10]
-                if len(entry) < 10:
-                    continue
-                tlen = entry[0]
-                marker = entry[1]
-                cmd = entry[2]
-                plen = entry[6]
-                name = CMD_NAMES.get(cmd, f"UNK_0x{cmd:02X}")
-                hex_str = " ".join(f"{b:02x}" for b in entry)
+        # Parse entries from this page
+        entries_per_page = 5  # 2 header + 5*12 = 62 bytes
+        for i in range(entries_per_page):
+            offset = 2 + i * ENTRY_SIZE
+            if offset + ENTRY_SIZE > len(raw):
+                break
+            entry = raw[offset:offset + ENTRY_SIZE]
+            if all(b == 0 for b in entry):
+                continue
+            all_entries.append(entry)
 
-                payload_bytes = entry[7:7 + min(plen, 3)]
-                payload_str = " ".join(f"{b:02x}" for b in payload_bytes)
-                if plen > 3:
-                    payload_str += "..."
-
-                idx = total_count - n + i + 1
-                print(f"{idx:3d}  0x{cmd:02X}  {name:<12}  {plen:4d}  {hex_str}  payload=[{payload_str}]")
+        if len(all_entries) >= total_count:
             break
+        time.sleep(0.05)
+
+    # Print all entries
+    print(f"{'#':>3}  {'CMD':>4}  {'Name':<12}  {'plen':>4}  {'Raw (12 bytes)':<40}  Payload")
+    print("-" * 95)
+
+    for i, entry in enumerate(all_entries):
+        if len(entry) < 7:
+            continue
+        tlen = entry[0]
+        marker = entry[1]
+        cmd = entry[2]
+        plen = entry[6]
+        name = CMD_NAMES.get(cmd, f"UNK_0x{cmd:02X}")
+        hex_str = " ".join(f"{b:02x}" for b in entry)
+
+        # Extract payload bytes
+        payload = entry[7:7 + min(plen, 5)]
+        payload_str = " ".join(f"{b:02x}" for b in payload)
+        if plen > 5:
+            payload_str += f"... ({plen}B)"
+
+        print(f"{i+1:3d}  0x{cmd:02X}  {name:<12}  {plen:4d}  {hex_str}  [{payload_str}]")
 
     k32.CloseHandle(h)
     k32.CloseHandle(e)
