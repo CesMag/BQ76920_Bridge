@@ -354,12 +354,9 @@ static void Handle_WriteCommand(uint8_t cmd, const uint8_t *payload, uint8_t pay
    *   SEND_BYTE (0x06):  returns 0x46 error
    *   WRITE_BYTE (0x07): NO RESPONSE (timeout!)
    * The DLLs expect error ack, then success on SUBMIT. */
-  if (cmd == EV2300_CMD_WRITE_BYTE)
-  {
-    /* Real EV2300 does not respond to WRITE_BYTE -- DLL expects timeout */
-    return;
-  }
-  /* All other write commands: error ack with register in payload */
+  /* Write ack: return 0x46 error with register in payload.
+   * The write is buffered, not executed yet -- SUBMIT does the I2C op.
+   * All write commands get the same error ack format. */
   {
     uint8_t errPayload[2] = {pendingWrite.reg, 0x93U};
     EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U);
