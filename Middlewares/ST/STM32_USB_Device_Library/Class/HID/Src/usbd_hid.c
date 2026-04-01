@@ -231,8 +231,8 @@ __ALIGN_BEGIN static uint8_t USBD_HID_DeviceQualifierDesc[USB_LEN_DEV_QUALIFIER_
 /* Vendor-defined HID report descriptor: 64-byte IN + 64-byte OUT */
 __ALIGN_BEGIN static uint8_t HID_ReportDesc[HID_REPORT_DESC_SIZE] __ALIGN_END =
 {
-  0x06, 0x00, 0xFF,  /* Usage Page (Vendor Defined 0xFF00) */
-  0x09, 0x01,        /* Usage (Vendor Usage 1)             */
+  0x06, 0xA0, 0xFF,  /* Usage Page (Vendor Defined 0xFFA0) */
+  0x09, 0xA5,        /* Usage (0x00A5)                     */
   0xA1, 0x01,        /* Collection (Application)           */
 
   /* Input report: 64 bytes (device -> host) */
