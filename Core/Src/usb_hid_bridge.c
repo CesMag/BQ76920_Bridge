@@ -179,6 +179,7 @@ static void EV2300_BuildRawResponse(uint8_t respCode,
   rspBuffer[0] = totalLen;
   rspBuffer[1] = EV2300_FRAME_MARKER;
   rspBuffer[2] = respCode;
+  rspBuffer[5] = 0x01U;  /* Real EV2300 always has 0x01 at reserved[2] */
   rspBuffer[6] = payloadLen;
 
   if (payloadLen > 0U && payload != NULL)
@@ -337,16 +338,23 @@ static void Handle_WriteCommand(uint8_t cmd, const uint8_t *payload, uint8_t pay
       break;
   }
 
-  /* Ack with exact response codes from real EV2300 */
-  uint8_t ackCode;
-  switch (cmd)
+  /* Real EV2300 write ack behavior (from dual-device diff):
+   *   WRITE_WORD (0x04): returns 0x46 error (write is buffered, not executed)
+   *   WRITE_BLOCK (0x05): returns 0x46 error (same as WRITE_WORD)
+   *   SEND_BYTE (0x06):  returns 0x46 error
+   *   WRITE_BYTE (0x07): NO RESPONSE (timeout!)
+   * The DLLs expect error ack, then success on SUBMIT. */
+  if (cmd == EV2300_CMD_WRITE_BYTE)
   {
-    case EV2300_CMD_SEND_BYTE:   ackCode = 0xC0U; break; /* 0x06 -> 0xC0 */
-    case EV2300_CMD_WRITE_BYTE:  ackCode = 0x4EU; break; /* 0x07 -> 0x4E */
-    default:                     ackCode = (uint8_t)(cmd | EV2300_RESP_FLAG); break;
+    /* Real EV2300 does not respond to WRITE_BYTE -- DLL expects timeout */
+    return;
   }
-  EV2300_BuildRawResponse(ackCode, NULL, 0U);
-  EV2300_SendResponse();
+  /* All other write commands: error ack with register in payload */
+  {
+    uint8_t errPayload[2] = {pendingWrite.reg, 0x93U};
+    EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U);
+    EV2300_SendResponse();
+  }
 }
 
 /**
@@ -354,9 +362,12 @@ static void Handle_WriteCommand(uint8_t cmd, const uint8_t *payload, uint8_t pay
   */
 static void Handle_Submit(void)
 {
+  /* Real EV2300 SUBMIT always returns 0xC0 with 3-byte payload {0x33, 0x31, 0x6D} */
+  static const uint8_t submitPayload[3] = {0x33U, 0x31U, 0x6DU};
+
   if (pendingWrite.active == 0U)
   {
-    EV2300_BuildRawResponse(0xC0U, NULL, 0U); /* Real EV2300 SUBMIT response */
+    EV2300_BuildRawResponse(0xC0U, submitPayload, 3U);
     EV2300_SendResponse();
     return;
   }
@@ -409,7 +420,7 @@ static void Handle_Submit(void)
 
   if (st == HAL_OK)
   {
-    EV2300_BuildRawResponse(0xC0U, NULL, 0U);
+    EV2300_BuildRawResponse(0xC0U, submitPayload, 3U);
   }
   else
   {
