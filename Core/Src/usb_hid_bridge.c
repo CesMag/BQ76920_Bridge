@@ -352,11 +352,9 @@ static void Handle_WriteCommand(uint8_t cmd, const uint8_t *payload, uint8_t pay
    *   WRITE_WORD (0x04): returns 0x46 error (write is buffered, not executed)
    *   WRITE_BLOCK (0x05): returns 0x46 error (same as WRITE_WORD)
    *   SEND_BYTE (0x06):  returns 0x46 error
-   *   WRITE_BYTE (0x07): NO RESPONSE (timeout!)
-   * The DLLs expect error ack, then success on SUBMIT. */
-  /* Write ack: return 0x46 error with register in payload.
-   * The write is buffered, not executed yet -- SUBMIT does the I2C op.
-   * All write commands get the same error ack format. */
+   *   WRITE_BYTE (0x07): NO RESPONSE -- host times out, then sends SUBMIT
+   * bqStudio DLL interprets any 0x46 on WRITE_BYTE as I2C NACK and aborts. */
+  if (cmd != EV2300_CMD_WRITE_BYTE)
   {
     uint8_t errPayload[2] = {pendingWrite.reg, 0x93U};
     EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U);
@@ -452,22 +450,177 @@ static void Handle_Submit(void)
   */
 static void Handle_Undocumented(uint8_t cmd)
 {
+  /* Shared payload for bare error responses (real EV2300 uses 55 93 for bare cmds,
+   * distinct from the I2C-failure error payload {00 93} in EV2300_BuildErrorResponse). */
+  static const uint8_t bareErr[2] = {0x55U, 0x93U};
+
   switch (cmd)
   {
-    /* ── Full sweep (2026-04-01) proved the real EV2300 TIMES OUT on
-       ALL undocumented commands sent WITHOUT payload (bare).
-       However, when sent WITH payload (by bq76940.exe during init),
-       some commands need responses.
+    /* ── Bare command responses verified against real EV2300A (full_sweep_results.json
+       2026-04-01T01:37). All values are exact response codes and payloads captured
+       from the real hardware. ────────────────────────────────────────────────────── */
 
-       Strategy: the plen==0 guard in Bridge_ProcessCommand() already
-       routes bare commands here (which returns nothing). Commands
-       that reach here WITH payload need proper responses. ────────── */
+    case 0x00U:
+    {
+      static const uint8_t p[] = {0x55U, 0x00U, 0x08U};
+      EV2300_BuildRawResponse(0x40U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
 
-    /* 0x0D -> 0x4E (I2C power/bus control -- bq76940.exe sends this) */
+    case 0x01U:
+    {
+      static const uint8_t p[] = {0x55U, 0x00U, 0x00U, 0x08U};
+      EV2300_BuildRawResponse(0x41U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x02U:
+    {
+      static const uint8_t p[] = {0x02U, 0x00U, 0x08U};
+      EV2300_BuildRawResponse(0x42U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    /* 0x03 bare -> 0x46 error */
+    case 0x03U:
+      EV2300_BuildRawResponse(0x46U, bareErr, 2U);
+      EV2300_SendResponse();
+      break;
+
+    /* 0x0D -> 0x4E (I2C power/bus control) */
     case 0x0DU:
     {
-      uint8_t p[3] = {0x02U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x4EU, p, 3U);
+      static const uint8_t p[] = {0x02U, 0x00U, 0x08U};
+      EV2300_BuildRawResponse(0x4EU, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    /* 0x0E, 0x0F bare -> 0x46 error */
+    case 0x0EU:
+    case 0x0FU:
+      EV2300_BuildRawResponse(0x46U, bareErr, 2U);
+      EV2300_SendResponse();
+      break;
+
+    case 0x10U:
+      EV2300_BuildRawResponse(0x10U, bareErr, 2U);
+      EV2300_SendResponse();
+      break;
+
+    case 0x11U:
+    {
+      static const uint8_t p[] = {0x00U, 0x08U};
+      EV2300_BuildRawResponse(0x50U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x12U:
+    {
+      static const uint8_t p[] = {0xF6U, 0x00U, 0xFDU};
+      EV2300_BuildRawResponse(0x4AU, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x14U:
+    {
+      static const uint8_t p[] = {0xBDU, 0x00U, 0x00U, 0x0AU};
+      EV2300_BuildRawResponse(0x4BU, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x16U:
+    {
+      static const uint8_t p[] = {0x79U, 0x00U, 0xFDU};
+      EV2300_BuildRawResponse(0x4CU, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x19U:
+    {
+      static const uint8_t p[] = {0x55U, 0x00U, 0x02U};
+      EV2300_BuildRawResponse(0x51U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    /* 0x1A bare -> 0x46 error */
+    case 0x1AU:
+      EV2300_BuildRawResponse(0x46U, bareErr, 2U);
+      EV2300_SendResponse();
+      break;
+
+    case 0x1DU:
+    {
+      static const uint8_t p[] = {0x55U, 0x00U, 0x02U};
+      EV2300_BuildRawResponse(0x52U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    /* 0x1E, 0x20 bare -> 0x46 error */
+    case 0x1EU:
+    case 0x20U:
+      EV2300_BuildRawResponse(0x46U, bareErr, 2U);
+      EV2300_SendResponse();
+      break;
+
+    case 0x22U:
+      EV2300_BuildRawResponse(0x22U, bareErr, 2U);
+      EV2300_SendResponse();
+      break;
+
+    case 0x23U:
+    {
+      static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
+      EV2300_BuildRawResponse(0x53U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x24U:
+    {
+      static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
+      EV2300_BuildRawResponse(0x24U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x30U:
+    {
+      static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
+      EV2300_BuildRawResponse(0x30U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x40U:
+    {
+      static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
+      EV2300_BuildRawResponse(0x40U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x41U:
+    {
+      static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
+      EV2300_BuildRawResponse(0x41U, p, (uint8_t)sizeof(p));
+      EV2300_SendResponse();
+      break;
+    }
+
+    case 0x42U:
+    {
+      static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
+      EV2300_BuildRawResponse(0x42U, p, (uint8_t)sizeof(p));
       EV2300_SendResponse();
       break;
     }
@@ -487,20 +640,16 @@ static void Handle_Undocumented(uint8_t cmd)
       break;
     }
 
-    /* ── All other undocumented commands ─────────────────────────── */
-    /* Bare commands (plen=0) are caught by the guard in
-       Bridge_ProcessCommand and routed here -- they get no response,
-       matching the real EV2300's timeout behavior.
-       Commands WITH payload that aren't handled above get an error
-       response so the tool doesn't hang waiting for a reply. */
+    /* ── All other commands ───────────────────────────────────────── */
+    /* Commands with payload that aren't handled above get an error
+     * response so the host doesn't hang. Bare commands (plen=0) that
+     * aren't listed above stay silent, matching real EV2300 timeout. */
     default:
       if (cmdBuffer[6] > 0U)
       {
-        /* Has payload -- respond with error so tool doesn't freeze */
         EV2300_BuildErrorResponse();
         EV2300_SendResponse();
       }
-      /* else: bare command, no response (timeout) */
       break;
   }
 }
