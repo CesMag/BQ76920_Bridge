@@ -61,7 +61,7 @@ extern "C" {
 #endif /* HID_HS_BINTERVAL */
 
 #ifndef HID_FS_BINTERVAL
-#define HID_FS_BINTERVAL                           0x0AU
+#define HID_FS_BINTERVAL                           0x01U  /* 1ms poll -- matches real EV2300 */
 #endif /* HID_FS_BINTERVAL */
 
 #define USBD_HID_REQ_SET_PROTOCOL                       0x0BU

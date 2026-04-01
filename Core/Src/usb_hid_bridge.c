@@ -67,13 +67,18 @@ static void EV2300_BuildRawResponse(uint8_t respCode,
                                      uint8_t crcSkipTail);
 static void EV2300_BuildErrorResponse(void);
 static void EV2300_SendResponse(void);
+static uint16_t Bridge_NormalizeAddress(uint16_t addr);
+static uint8_t Bridge_GetAddress7(uint16_t addr);
 static uint8_t Bridge_IsBqAddress(uint16_t addr);
 static HAL_StatusTypeDef Bridge_Read(uint16_t addr, uint8_t reg, uint8_t *data, uint16_t len);
 static HAL_StatusTypeDef Bridge_Write(uint16_t addr, uint8_t reg, const uint8_t *data, uint16_t len);
 static void Handle_ReadByte(uint16_t addr, uint8_t reg);
 static void Handle_ReadWord(uint16_t addr, uint8_t reg);
 static void Handle_ReadBlock(uint16_t addr, uint8_t reg);
+static void Handle_ExtendedRead(uint16_t addr, uint8_t reg, uint8_t count);
+static void Handle_I2CPower(const uint8_t *payload, uint8_t payloadLen);
 static void Handle_WriteCommand(uint8_t cmd, const uint8_t *payload, uint8_t payloadLen);
+static void Handle_ExtendedWrite(const uint8_t *payload, uint8_t payloadLen);
 static void Handle_Submit(void);
 static void Handle_Undocumented(uint8_t cmd);
 
@@ -149,7 +154,7 @@ void Bridge_ProcessCommand(void)
 
   if (plen >= 1U && cmd != EV2300_CMD_SUBMIT)
   {
-    i2cAddr = (uint16_t)cmdBuffer[7];
+    i2cAddr = Bridge_NormalizeAddress((uint16_t)cmdBuffer[7]);
     if (plen >= 2U)
     {
       reg = cmdBuffer[8];
@@ -178,6 +183,18 @@ void Bridge_ProcessCommand(void)
 
     case EV2300_CMD_READ_BYTE:  /* 0x03 -> resp 0x42 (NOT 0x43!) */
       Handle_ReadByte(i2cAddr, reg);
+      break;
+
+    case 0x1DU:
+      Handle_ExtendedRead(i2cAddr, reg, (plen >= 3U) ? cmdBuffer[9] : 0U);
+      break;
+
+    case 0x1EU:
+      Handle_ExtendedWrite(&cmdBuffer[7], plen);
+      break;
+
+    case 0x18U:
+      Handle_I2CPower(&cmdBuffer[7], plen);
       break;
 
     case EV2300_CMD_WRITE_WORD:
@@ -269,24 +286,70 @@ static void EV2300_BuildErrorResponse(void)
 
 static void EV2300_SendResponse(void)
 {
-  USBD_HID_SendReport(&hUsbDeviceFS, rspBuffer, BRIDGE_REPORT_SIZE);
+  uint32_t start = HAL_GetTick();
+  USBD_HID_HandleTypeDef *hhid =
+      (USBD_HID_HandleTypeDef *)hUsbDeviceFS.pClassDataCmsit[hUsbDeviceFS.classId];
+
+  if (hhid == NULL)
+  {
+    return;
+  }
+
+  while (hhid->state != USBD_HID_IDLE)
+  {
+    if ((HAL_GetTick() - start) > 20U)
+    {
+      return;
+    }
+  }
+
+  (void)USBD_HID_SendReport(&hUsbDeviceFS, rspBuffer, BRIDGE_REPORT_SIZE);
+}
+
+static uint16_t Bridge_NormalizeAddress(uint16_t addr)
+{
+  if (addr == 0x08U)
+  {
+    return BQ76920_ADDR_NO_CRC;
+  }
+
+  if (addr == 0x18U)
+  {
+    return BQ76920_ADDR_CRC;
+  }
+
+  return addr;
+}
+
+static uint8_t Bridge_GetAddress7(uint16_t addr)
+{
+  if (addr == 0x08U || addr == 0x18U)
+  {
+    return (uint8_t)addr;
+  }
+
+  return (uint8_t)(addr >> 1U);
 }
 
 static uint8_t Bridge_IsBqAddress(uint16_t addr)
 {
+  uint16_t norm = Bridge_NormalizeAddress(addr);
+
   if (bridgeBms == NULL)
   {
     return 0U;
   }
 
-  return (uint8_t)((addr == BQ76920_ADDR_NO_CRC)
-                || (addr == BQ76920_ADDR_CRC)
-                || (addr == bridgeBms->i2cAddr));
+  return (uint8_t)((norm == BQ76920_ADDR_NO_CRC)
+                || (norm == BQ76920_ADDR_CRC)
+                || (norm == bridgeBms->i2cAddr));
 }
 
 static HAL_StatusTypeDef Bridge_Read(uint16_t addr, uint8_t reg, uint8_t *data, uint16_t len)
 {
-  if (Bridge_IsBqAddress(addr) != 0U)
+  uint16_t norm = Bridge_NormalizeAddress(addr);
+
+  if (Bridge_IsBqAddress(norm) != 0U)
   {
     for (uint16_t i = 0U; i < len; i++)
     {
@@ -299,14 +362,16 @@ static HAL_StatusTypeDef Bridge_Read(uint16_t addr, uint8_t reg, uint8_t *data, 
     return HAL_OK;
   }
 
-  return HAL_I2C_Mem_Read(&hi2c1, addr, reg,
+  return HAL_I2C_Mem_Read(&hi2c1, norm, reg,
                           I2C_MEMADD_SIZE_8BIT,
                           data, len, I2C_TIMEOUT);
 }
 
 static HAL_StatusTypeDef Bridge_Write(uint16_t addr, uint8_t reg, const uint8_t *data, uint16_t len)
 {
-  if (Bridge_IsBqAddress(addr) != 0U)
+  uint16_t norm = Bridge_NormalizeAddress(addr);
+
+  if (Bridge_IsBqAddress(norm) != 0U)
   {
     for (uint16_t i = 0U; i < len; i++)
     {
@@ -319,7 +384,7 @@ static HAL_StatusTypeDef Bridge_Write(uint16_t addr, uint8_t reg, const uint8_t 
     return HAL_OK;
   }
 
-  return HAL_I2C_Mem_Write(&hi2c1, addr, reg,
+  return HAL_I2C_Mem_Write(&hi2c1, norm, reg,
                            I2C_MEMADD_SIZE_8BIT,
                            (uint8_t *)data, len, I2C_TIMEOUT);
 }
@@ -339,7 +404,7 @@ static void Handle_ReadByte(uint16_t addr, uint8_t reg)
   HAL_StatusTypeDef st = Bridge_Read(addr, reg, &val, 1U);
   if (st == HAL_OK)
   {
-    uint8_t payload[3] = {reg, val, (uint8_t)(addr >> 1U)};
+    uint8_t payload[3] = {reg, val, Bridge_GetAddress7(addr)};
     EV2300_BuildRawResponse(0x42U, payload, 3U, 1U);
   }
   else
@@ -361,7 +426,7 @@ static void Handle_ReadWord(uint16_t addr, uint8_t reg)
   HAL_StatusTypeDef st = Bridge_Read(addr, reg, buf, 2U);
   if (st == HAL_OK)
   {
-    uint8_t payload[4] = {reg, buf[0], buf[1], (uint8_t)(addr >> 1U)};
+    uint8_t payload[4] = {reg, buf[0], buf[1], Bridge_GetAddress7(addr)};
     EV2300_BuildRawResponse(0x41U, payload, 4U, 1U);
   }
   else
@@ -393,7 +458,7 @@ static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
   if (st == HAL_OK)
   {
     /* Match real EV2300: {block_count, first_data_byte, i2c_7bit_addr} */
-    uint8_t payload[3] = {reqLen, data[0], (uint8_t)(addr >> 1U)};
+    uint8_t payload[3] = {reqLen, data[0], Bridge_GetAddress7(addr)};
     EV2300_BuildRawResponse(0x42U, payload, 3U, 1U);
   }
   else
@@ -401,6 +466,57 @@ static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
     EV2300_BuildErrorResponse();
   }
   EV2300_SendResponse();
+}
+
+/**
+  * @brief  CMD 0x1D -> variable-length register read used by TI GUI
+  *         Payload: {i2c_addr8, start_reg, count}
+  *         Response: 0x52 with payload {count, data[count], i2c_7bit_addr}
+  */
+static void Handle_ExtendedRead(uint16_t addr, uint8_t reg, uint8_t count)
+{
+  uint8_t data[56];
+  uint8_t payload[58];
+
+  if (count == 0U)
+  {
+    EV2300_BuildErrorResponse();
+    EV2300_SendResponse();
+    return;
+  }
+
+  if (count > sizeof(data))
+  {
+    count = (uint8_t)sizeof(data);
+  }
+
+  if (Bridge_Read(addr, reg, data, count) == HAL_OK)
+  {
+    payload[0] = count;
+    memcpy(&payload[1], data, count);
+    payload[1U + count] = Bridge_GetAddress7(addr);
+    EV2300_BuildRawResponse(0x52U, payload, (uint8_t)(count + 2U), 1U);
+  }
+  else
+  {
+    EV2300_BuildErrorResponse();
+  }
+
+  EV2300_SendResponse();
+}
+
+/**
+  * @brief  CMD 0x18 -> I2CPower control used by TI DLLs
+  *         Payload: {enable}
+  *         Real EV2300: no HID response.  DLL interprets silence as
+  *         success (status 0).  Sending ANY response poisons the HID
+  *         buffer and causes the next ReadSMBusWord to fail.
+  */
+static void Handle_I2CPower(const uint8_t *payload, uint8_t payloadLen)
+{
+  (void)payload;
+  (void)payloadLen;
+  /* Intentionally empty -- real EV2300 is silent for I2CPower. */
 }
 
 /**
@@ -475,6 +591,44 @@ static void Handle_WriteCommand(uint8_t cmd, const uint8_t *payload, uint8_t pay
     EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U, 0U);
     EV2300_SendResponse();
   }
+}
+
+/**
+  * @brief  CMD 0x1E -> variable-length register write used by TI GUI
+  *         Payload: {i2c_addr8, start_reg, count, data[count]}
+  *         The actual write executes when the host sends SUBMIT (0x80).
+  */
+static void Handle_ExtendedWrite(const uint8_t *payload, uint8_t payloadLen)
+{
+  uint8_t count;
+
+  /* Real EV2300: no HID response for ExtendedWrite.  Sending any
+   * response poisons the buffer and breaks the next ExtendedRead.
+   * Silently ignore malformed packets for the same reason. */
+
+  if (payloadLen < 4U)
+  {
+    return;
+  }
+
+  count = payload[2];
+  if ((count == 0U) || (payloadLen < (uint8_t)(3U + count)))
+  {
+    return;
+  }
+
+  if (count > MAX_WRITE_DATA)
+  {
+    count = MAX_WRITE_DATA;
+  }
+
+  pendingWrite.active  = 1U;
+  pendingWrite.cmd     = (count == 1U) ? EV2300_CMD_WRITE_BYTE : EV2300_CMD_WRITE_BLOCK;
+  pendingWrite.i2cAddr = Bridge_NormalizeAddress((uint16_t)payload[0]);
+  pendingWrite.reg     = payload[1];
+  pendingWrite.dataLen = count;
+  memcpy(pendingWrite.data, &payload[3], count);
+  /* Actual I2C write executes on SUBMIT (0x80). */
 }
 
 /**
@@ -559,6 +713,23 @@ static void Handle_Submit(void)
   */
 static void Handle_Undocumented(uint8_t cmd)
 {
+  uint8_t plen = cmdBuffer[6];
+
+  /* Some TI GUI paths still arrive here for payload-bearing 0x1D/0x1E.
+   * Preserve the bare-command responses below, but honor the parameterized
+   * forms whenever a payload is present. */
+  if (cmd == 0x1DU && plen >= 3U)
+  {
+    Handle_ExtendedRead((uint16_t)cmdBuffer[7], cmdBuffer[8], cmdBuffer[9]);
+    return;
+  }
+
+  if (cmd == 0x1EU && plen >= 4U)
+  {
+    Handle_ExtendedWrite(&cmdBuffer[7], plen);
+    return;
+  }
+
   /* Shared payload for bare error responses (real EV2300 uses 55 93 for bare cmds,
    * distinct from the I2C-failure error payload {00 93} in EV2300_BuildErrorResponse). */
   static const uint8_t bareErr[2] = {0x55U, 0x93U};
