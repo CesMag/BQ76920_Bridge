@@ -428,16 +428,17 @@ static void Handle_Undocumented(uint8_t cmd)
       break;
     }
 
-    /* 0x0D -> 0x4E with payload */
+    /* 0x0D -> 0x46 error (real EV2300 returns error for I2C bus status probe) */
     case 0x0DU:
-    {
-      uint8_t p[3] = {0x02U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x4EU, p, 3U);
+      EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
       break;
-    }
 
-    /* 0x11 -> 0x51, 0x19 -> 0x51 */
+    /* 0x11 -> 0x46 error (real EV2300 returns error for internal status probe) */
     case 0x11U:
+      EV2300_BuildRawResponse(EV2300_CMD_ERROR, NULL, 0U);
+      break;
+
+    /* 0x19 -> 0x51 */
     case 0x19U:
     {
       uint8_t p[3] = {0x00U, 0x00U, 0x02U};
