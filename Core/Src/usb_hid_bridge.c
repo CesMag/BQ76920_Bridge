@@ -490,11 +490,20 @@ static void Handle_Undocumented(uint8_t cmd)
       break;
     }
 
-    /* ── All other undocumented commands: NO RESPONSE ─────────────── */
-    /* Bare commands (plen=0) are already caught by the guard above.
-       Commands with payload that aren't in this switch also get no
-       response, matching the real EV2300's behavior for unknown ops. */
+    /* ── All other undocumented commands ─────────────────────────── */
+    /* Bare commands (plen=0) are caught by the guard in
+       Bridge_ProcessCommand and routed here -- they get no response,
+       matching the real EV2300's timeout behavior.
+       Commands WITH payload that aren't handled above get an error
+       response so the tool doesn't hang waiting for a reply. */
     default:
+      if (cmdBuffer[6] > 0U)
+      {
+        /* Has payload -- respond with error so tool doesn't freeze */
+        EV2300_BuildErrorResponse();
+        EV2300_SendResponse();
+      }
+      /* else: bare command, no response (timeout) */
       break;
   }
 }
