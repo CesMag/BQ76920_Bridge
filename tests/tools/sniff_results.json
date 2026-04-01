@@ -1,0 +1,180 @@
+{
+  "timestamp": "2026-04-01T00:25:10.809453",
+  "results": [
+    {
+      "cmd": "0x01",
+      "label": "READ_WORD",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 f4 55 aa 41 00 00 01 04 00 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x03",
+      "label": "READ_BYTE",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 170,
+      "actual_plen": 57,
+      "payload": "46 00 00 01 02 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17",
+      "raw": "0c 00 00 08 f5 55 aa 46 00 00 01 02 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x0D",
+      "label": "I2C_STAT",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 b9 55 aa 46 00 00 01 02 00 02 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x0E",
+      "label": "UNK_0E",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 b9 55 aa 4e 00 00 01 03 02 02 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x11",
+      "label": "INT_STAT",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 70,
+      "actual_plen": 57,
+      "payload": "00 00 01 02 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17",
+      "raw": "0b 00 08 e2 55 aa 46 00 00 01 02 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x14",
+      "label": "DEV_CFG",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x1D",
+      "label": "FW_CTRL",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 f4 55 aa 50 00 00 01 02 00 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x1E",
+      "label": "UNK_1E",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 08 a9 55 aa 46 00 00 01 02 55 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x1F",
+      "label": "UNK_1F",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 f4 55 aa 4b 00 00 01 04 bd 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x20",
+      "label": "UNK_20",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 170,
+      "actual_plen": 57,
+      "payload": "46 00 00 01 02 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17",
+      "raw": "0c 00 00 0a 30 55 aa 46 00 00 01 02 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x21",
+      "label": "UNK_21",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 b9 55 aa 52 00 00 01 03 55 02 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x22",
+      "label": "UNK_22",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 70,
+      "actual_plen": 57,
+      "payload": "00 00 01 02 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17",
+      "raw": "0b 00 01 c9 55 aa 46 00 00 01 02 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x2D",
+      "label": "UNK_2D",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x30",
+      "label": "ECHO",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x31",
+      "label": "UNK_31",
+      "resp": "None",
+      "is_error": true,
+      "declared_plen": 0,
+      "actual_plen": 0,
+      "payload": "",
+      "raw": "0a 93 f4 55 aa 22 00 04 08 aa 30 55 00 00 00 00 00 00 00 00 f9 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 8a 55 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d7 c5 17"
+    },
+    {
+      "cmd": "0x32",
+      "resp": null,
+      "raw": null
+    },
+    {
+      "cmd": "0x33",
+      "resp": null,
+      "raw": null
+    },
+    {
+      "cmd": "0x34",
+      "resp": null,
+      "raw": null
+    },
+    {
+      "cmd": "0x35",
+      "resp": null,
+      "raw": null
+    },
+    {
+      "cmd": "0x70",
+      "resp": null,
+      "raw": null
+    }
+  ]
+}

@@ -1,0 +1,3557 @@
+{
+  "timestamp": "2026-04-01T01:14:01.180264",
+  "real_serial": "HPA02 FW:2.0a/TUSB3210:0",
+  "stm32_serial": "HPA02 FW:2.0b/TUSB3210:0",
+  "command_sweep": [
+    {
+      "cmd": "0x00",
+      "real": {
+        "resp": "0x70",
+        "resp_int": 112,
+        "status": "OK",
+        "plen": 170,
+        "payload": "40 00 00 01 03 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00 00 01 ff 00 00 00 07 05 01 02 40 00 00 00 00 00 00 0d 21 f9 cf 0f b8 f6 53 8c 5d 7a f5 f9 59 d5 c5 17",
+        "reserved": "00 00 00",
+        "raw": "0c aa 70 00 00 00 aa 40 00 00 01 03 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x40",
+        "resp_int": 64,
+        "status": "OK",
+        "plen": 0,
+        "payload": "",
+        "reserved": "00 00 00",
+        "raw": "09 aa 40 00 00 00 00 c8 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x01",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 41 00 00 01 04 55 55 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x02",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 42 00 00 01 03 02 02 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x03",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x08",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 00",
+        "raw": "0c aa 42 00 00 00 03 02 00 08 2e 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x09",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x0A",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x0B",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x0C",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x0D",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 4e 00 00 01 03 02 55 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x4E",
+        "resp_int": 78,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 00",
+        "raw": "0c aa 4e 00 00 00 03 02 00 08 fa 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x0E",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x0F",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x10",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x11",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 10 33 31 6d aa 50 55 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x10",
+        "resp_int": 16,
+        "status": "OK",
+        "plen": 0,
+        "payload": "",
+        "reserved": "00 00 00",
+        "raw": "09 aa 10 00 00 00 00 32 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x12",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 4a 00 00 01 03 f6 55 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x50",
+        "resp_int": 80,
+        "status": "OK",
+        "plen": 2,
+        "payload": "00 08",
+        "reserved": "00 00 00",
+        "raw": "0b aa 50 00 00 00 02 00 08 78 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x13",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x14",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 b9 55 aa 4b 00 00 01 04 bd 00 55 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x4A",
+        "resp_int": 74,
+        "status": "OK",
+        "plen": 3,
+        "payload": "f6 00 fd",
+        "reserved": "00 00 00",
+        "raw": "0c aa 4a 00 00 00 03 f6 00 fd b4 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x15",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x16",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 b9 55 aa 4c 00 00 01 03 79 02 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x4B",
+        "resp_int": 75,
+        "status": "OK",
+        "plen": 4,
+        "payload": "bd 00 00 0a",
+        "reserved": "00 00 00",
+        "raw": "0d aa 4b 00 00 00 04 bd 00 00 0a 8f 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x17",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x18",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x4C",
+        "resp_int": 76,
+        "status": "OK",
+        "plen": 3,
+        "payload": "79 00 fd",
+        "reserved": "00 00 00",
+        "raw": "0c aa 4c 00 00 00 03 79 00 fd 92 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x19",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 b9 55 aa 51 00 00 01 03 55 00 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x1A",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x51",
+        "resp_int": 81,
+        "status": "OK",
+        "plen": 3,
+        "payload": "55 00 01",
+        "reserved": "00 00 00",
+        "raw": "0c aa 51 00 00 00 03 55 00 01 21 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x1B",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x1C",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x1D",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 52 00 00 01 03 55 55 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x52",
+        "resp_int": 82,
+        "status": "OK",
+        "plen": 3,
+        "payload": "55 00 01",
+        "reserved": "00 00 00",
+        "raw": "0c aa 52 00 00 00 03 55 00 01 14 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x1E",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x1F",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x20",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 46 00 00 01 02 55 55 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x21",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x22",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x22",
+        "resp_int": 34,
+        "status": "OK",
+        "plen": 0,
+        "payload": "",
+        "reserved": "00 00 00",
+        "raw": "09 aa 22 00 00 00 00 a0 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x23",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 93 f4 55 aa 22 00 04 08 aa 53 55 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x53",
+        "resp_int": 83,
+        "status": "OK",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "reserved": "00 00 00",
+        "raw": "0c aa 53 00 00 00 03 c2 00 00 bf 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x24",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": "0x24",
+        "resp_int": 36,
+        "status": "OK",
+        "plen": 3,
+        "payload": "c2 00 00",
+        "reserved": "00 00 00",
+        "raw": "0c aa 24 00 00 00 03 c2 00 00 43 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x25",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x26",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x27",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x28",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x29",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x2A",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x2B",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x2C",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x2D",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x2E",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x2F",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x30",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0b 00 00 dd 55 aa 24 02 00 aa 30 02 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x30",
+        "resp_int": 48,
+        "status": "OK",
+        "plen": 0,
+        "payload": "",
+        "reserved": "00 00 00",
+        "raw": "09 aa 30 00 00 00 00 56 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x31",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x32",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x33",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x34",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x35",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x36",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x37",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x38",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x39",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x3A",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x3B",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x3C",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x3D",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x3E",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x3F",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x40",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "04 00 aa 40 00 aa 24 02 00 aa 30 02 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x40",
+        "resp_int": 64,
+        "status": "OK",
+        "plen": 0,
+        "payload": "",
+        "reserved": "00 00 00",
+        "raw": "09 aa 40 00 00 00 00 c8 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x41",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "04 00 00 aa 41 aa 24 02 00 aa 30 02 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x41",
+        "resp_int": 65,
+        "status": "OK",
+        "plen": 0,
+        "payload": "",
+        "reserved": "00 00 00",
+        "raw": "09 aa 41 00 00 00 00 aa 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x42",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "05 00 00 00 aa 42 24 02 00 aa 30 02 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 0,
+        "payload": "",
+        "reserved": "00 00 00",
+        "raw": "09 aa 42 00 00 00 00 0c 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x43",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x44",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x45",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x46",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x47",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x48",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x49",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x4A",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x4B",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x4C",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x4D",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x4E",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x4F",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x50",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x51",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x52",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x53",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x54",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x55",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x56",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x57",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x58",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x59",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x5A",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x5B",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x5C",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x5D",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x5E",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x5F",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x60",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "05 00 00 00 aa 60 24 02 00 aa 30 02 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x61",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "05 00 04 08 aa 61 24 02 00 aa 30 02 00 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x62",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x63",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x64",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x65",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x66",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x67",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x68",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x69",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x6A",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x6B",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x6C",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x6D",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x6E",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x6F",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x70",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 00 04 08 aa 62 00 04 08 aa 63 00 04 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x60",
+        "resp_int": 96,
+        "status": "OK",
+        "plen": 36,
+        "payload": "61 00 04 08 aa 62 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00 00 01 ff 00 00 00 07 05 01 02 40 00 00",
+        "reserved": "00 00 00",
+        "raw": "2d aa 60 00 00 00 24 61 00 04 08 aa 62 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "resp_match": false
+    },
+    {
+      "cmd": "0x71",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x72",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x73",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x74",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x75",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x76",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x77",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x78",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x79",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x7A",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x7B",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x7C",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x7D",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x7E",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    },
+    {
+      "cmd": "0x7F",
+      "real": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "stm32": {
+        "resp": null,
+        "status": "TIMEOUT",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": ""
+      },
+      "resp_match": true
+    }
+  ],
+  "read_tests": [
+    {
+      "label": "READ_WORD addr=0x08(no-CRC) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 08 aa 64 00 04 08 aa 65 00 04 08 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x08(no-CRC) reg=0x04",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 41 00 00 01 04 00 55 00 08 b8 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x08(no-CRC) reg=0x0B",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 41 00 00 01 04 04 55 00 08 13 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x08(no-CRC) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 41 00 00 01 04 0b 55 00 08 54 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x08(no-CRC) reg=0x04",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 55 aa 46 00 00 01 02 0b 93 2e 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x08(no-CRC) reg=0x0B",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 55 aa 46 00 00 01 02 00 93 b9 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x08(no-CRC) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0b 55 aa 46 00 00 01 02 04 93 ed 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x08(no-CRC) reg=0x04",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0b aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x08(no-CRC) reg=0x0B",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0b aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x18(CRC) reg=0x00",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0c aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x18(CRC) reg=0x04",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 41 00 00 01 04 00 55 00 08 b8 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x18(CRC) reg=0x0B",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 41 00 00 01 04 04 55 00 08 13 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x18(CRC) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 41 00 00 01 04 0b 55 00 08 54 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x18(CRC) reg=0x04",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 55 aa 46 00 00 01 02 0b 93 2e 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x18(CRC) reg=0x0B",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 55 aa 46 00 00 01 02 00 93 b9 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x18(CRC) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0b 55 aa 46 00 00 01 02 04 93 ed 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x18(CRC) reg=0x04",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0b aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x18(CRC) reg=0x0B",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0b aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x00(bcast) reg=0x00",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0c aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x00(bcast) reg=0x04",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 41 00 00 01 04 00 55 00 08 b8 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x00(bcast) reg=0x0B",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 41 00 00 01 04 04 55 00 08 13 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x00(bcast) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 41 00 00 01 04 0b 55 00 08 54 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x00(bcast) reg=0x04",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 55 aa 46 00 00 01 02 0b 93 2e 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x00(bcast) reg=0x0B",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 55 aa 46 00 00 01 02 00 93 b9 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x00(bcast) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0b 55 aa 46 00 00 01 02 04 93 ed 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x00(bcast) reg=0x04",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0b aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x00(bcast) reg=0x0B",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0b aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x50(EEPROM) reg=0x00",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0c aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x50(EEPROM) reg=0x04",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 41 00 00 01 04 00 55 00 08 b8 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_WORD addr=0x50(EEPROM) reg=0x0B",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0c 41 00 00 01 04 04 55 00 08 13 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x50(EEPROM) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 41 00 00 01 04 0b 55 00 08 54 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x50(EEPROM) reg=0x04",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 55 aa 46 00 00 01 02 0b 93 2e 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BYTE addr=0x50(EEPROM) reg=0x0B",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0a 55 aa 46 00 00 01 02 00 93 b9 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x50(EEPROM) reg=0x00",
+      "real": {
+        "resp": null,
+        "status": "BAD_FRAME",
+        "plen": 0,
+        "payload": "",
+        "reserved": "",
+        "raw": "0b 55 aa 46 00 00 01 02 04 93 ed 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x50(EEPROM) reg=0x04",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0b aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    },
+    {
+      "label": "READ_BLOCK addr=0x50(EEPROM) reg=0x0B",
+      "real": {
+        "resp": "0x42",
+        "resp_int": 66,
+        "status": "OK",
+        "plen": 3,
+        "payload": "02 00 08",
+        "reserved": "00 00 01",
+        "raw": "0b aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+      },
+      "stm32": {
+        "resp": "0x46",
+        "resp_int": 70,
+        "status": "ERROR",
+        "plen": 2,
+        "payload": "00 93",
+        "reserved": "00 00 00",
+        "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+      },
+      "match": false
+    }
+  ],
+  "write_tests": [
+    {
+      "label": "WRITE_WORD(0x04) reg=0x0B val=0x19",
+      "real": {
+        "ack": {
+          "resp": "0x42",
+          "resp_int": 66,
+          "status": "OK",
+          "plen": 3,
+          "payload": "02 00 08",
+          "reserved": "00 00 01",
+          "raw": "0a aa 42 00 00 01 03 02 00 08 7d 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        },
+        "submit": {
+          "resp": null,
+          "status": "BAD_FRAME",
+          "plen": 0,
+          "payload": "",
+          "reserved": "",
+          "raw": "0b 55 aa 46 00 00 01 02 0b 93 2e 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        }
+      },
+      "stm32": {
+        "ack": {
+          "resp": "0x44",
+          "resp_int": 68,
+          "status": "OK",
+          "plen": 0,
+          "payload": "",
+          "reserved": "00 00 00",
+          "raw": "09 aa 44 00 00 00 00 47 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        },
+        "submit": {
+          "resp": "0x46",
+          "resp_int": 70,
+          "status": "ERROR",
+          "plen": 2,
+          "payload": "00 93",
+          "reserved": "00 00 00",
+          "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        }
+      }
+    },
+    {
+      "label": "WRITE_BYTE(0x07) reg=0x0B val=0x19",
+      "real": {
+        "ack": {
+          "resp": null,
+          "status": "TIMEOUT",
+          "plen": 0,
+          "payload": "",
+          "reserved": "",
+          "raw": ""
+        },
+        "submit": {
+          "resp": "0x46",
+          "resp_int": 70,
+          "status": "ERROR",
+          "plen": 2,
+          "payload": "0b 93",
+          "reserved": "00 00 01",
+          "raw": "0b aa 46 00 00 01 02 0b 93 2e 55 aa aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        }
+      },
+      "stm32": {
+        "ack": {
+          "resp": "0x4E",
+          "resp_int": 78,
+          "status": "OK",
+          "plen": 0,
+          "payload": "",
+          "reserved": "00 00 00",
+          "raw": "09 aa 4e 00 00 00 00 9a 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        },
+        "submit": {
+          "resp": "0x46",
+          "resp_int": 70,
+          "status": "ERROR",
+          "plen": 2,
+          "payload": "00 93",
+          "reserved": "00 00 00",
+          "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        }
+      }
+    },
+    {
+      "label": "WRITE_BLOCK(0x05) reg=0x0B",
+      "real": {
+        "ack": {
+          "resp": null,
+          "status": "BAD_FRAME",
+          "plen": 0,
+          "payload": "",
+          "reserved": "",
+          "raw": "0a c0 00 00 01 03 33 31 6d 8f 55 aa aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        },
+        "submit": {
+          "resp": "0xC0",
+          "resp_int": 192,
+          "status": "OK",
+          "plen": 3,
+          "payload": "33 31 6d",
+          "reserved": "00 00 01",
+          "raw": "0b aa c0 00 00 01 03 33 31 6d 8f 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        }
+      },
+      "stm32": {
+        "ack": {
+          "resp": "0x45",
+          "resp_int": 69,
+          "status": "OK",
+          "plen": 0,
+          "payload": "",
+          "reserved": "00 00 00",
+          "raw": "09 aa 45 00 00 00 00 25 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        },
+        "submit": {
+          "resp": "0x46",
+          "resp_int": 70,
+          "status": "ERROR",
+          "plen": 2,
+          "payload": "00 93",
+          "reserved": "00 00 00",
+          "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        }
+      }
+    },
+    {
+      "label": "SEND_BYTE(0x06) reg=0x0B",
+      "real": {
+        "ack": {
+          "resp": "0x46",
+          "resp_int": 70,
+          "status": "ERROR",
+          "plen": 2,
+          "payload": "0b 93",
+          "reserved": "00 00 01",
+          "raw": "0a aa 46 00 00 01 02 0b 93 2e 55 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        },
+        "submit": {
+          "resp": "0xC0",
+          "resp_int": 192,
+          "status": "OK",
+          "plen": 3,
+          "payload": "33 31 6d",
+          "reserved": "00 00 01",
+          "raw": "0b aa c0 00 00 01 03 33 31 6d 8f 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        }
+      },
+      "stm32": {
+        "ack": {
+          "resp": "0xC0",
+          "resp_int": 192,
+          "status": "OK",
+          "plen": 0,
+          "payload": "",
+          "reserved": "00 00 00",
+          "raw": "09 aa c0 00 00 00 00 5f 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        },
+        "submit": {
+          "resp": "0x46",
+          "resp_int": 70,
+          "status": "ERROR",
+          "plen": 2,
+          "payload": "00 93",
+          "reserved": "00 00 00",
+          "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        }
+      }
+    },
+    {
+      "label": "WRITE_WORD(0x04) CRC addr=0x30",
+      "real": {
+        "ack": {
+          "resp": "0x46",
+          "resp_int": 70,
+          "status": "ERROR",
+          "plen": 2,
+          "payload": "0b 93",
+          "reserved": "00 00 01",
+          "raw": "0a aa 46 00 00 01 02 0b 93 2e 55 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        },
+        "submit": {
+          "resp": "0xC0",
+          "resp_int": 192,
+          "status": "OK",
+          "plen": 3,
+          "payload": "33 31 6d",
+          "reserved": "00 00 01",
+          "raw": "0b aa c0 00 00 01 03 33 31 6d 8f 55 aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+        }
+      },
+      "stm32": {
+        "ack": {
+          "resp": "0x44",
+          "resp_int": 68,
+          "status": "OK",
+          "plen": 0,
+          "payload": "",
+          "reserved": "00 00 00",
+          "raw": "09 aa 44 00 00 00 00 47 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        },
+        "submit": {
+          "resp": "0x46",
+          "resp_int": 70,
+          "status": "ERROR",
+          "plen": 2,
+          "payload": "00 93",
+          "reserved": "00 00 00",
+          "raw": "0b aa 46 00 00 00 02 00 93 af 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+        }
+      }
+    }
+  ],
+  "submit_tests": [
+    {
+      "label": "SUBMIT alone (no pending)",
+      "device": "REAL",
+      "resp": "0x46",
+      "resp_int": 70,
+      "status": "ERROR",
+      "plen": 2,
+      "payload": "0b 93",
+      "reserved": "00 00 01",
+      "raw": "0b aa 46 00 00 01 02 0b 93 2e 55 aa aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+    },
+    {
+      "label": "SUBMIT alone (no pending)",
+      "device": "STM32",
+      "resp": "0xC0",
+      "resp_int": 192,
+      "status": "OK",
+      "plen": 0,
+      "payload": "",
+      "reserved": "00 00 00",
+      "raw": "09 aa c0 00 00 00 00 5f 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+    },
+    {
+      "label": "SUBMIT again (double)",
+      "device": "REAL",
+      "resp": null,
+      "status": "BAD_FRAME",
+      "plen": 0,
+      "payload": "",
+      "reserved": "",
+      "raw": "0b c0 00 00 01 03 33 31 6d 8f 55 aa aa 01 00 00 00 01 09 02 19 00 01 01 00 80 32 09 04 00"
+    },
+    {
+      "label": "SUBMIT again (double)",
+      "device": "STM32",
+      "resp": "0xC0",
+      "resp_int": 192,
+      "status": "OK",
+      "plen": 0,
+      "payload": "",
+      "reserved": "00 00 00",
+      "raw": "09 aa c0 00 00 00 00 5f 55 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+    }
+  ],
+  "summary": {
+    "cmd_total": 124,
+    "cmd_match": 90,
+    "cmd_diffs": 34,
+    "read_total": 36,
+    "read_match": 0
+  }
+}
