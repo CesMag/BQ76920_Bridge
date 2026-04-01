@@ -1,0 +1,16 @@
+PS C:\Users\cesmag02\Documents\GitHub\BQ76920_Bridge> & C:\Users\cesmag02\AppData\Local\Programs\Python\Python312\python.exe c:/Users/cesmag02/Documents/GitHub/BQ76920_Bridge/tests/tools/read_cmd_log.py
+Opening STM32 device...
+Total commands logged: 24
+Showing last 6 entries:
+
+  #   CMD  Name          plen  Raw bytes (first 10)
+----------------------------------------------------------------------
+ 19  0x80  SUBMIT           0  08 aa 80 00 00 00 00 97 55 00  payload=[]
+ 20  0x1E  UNK_0x1E         4  0c aa 1e 00 00 00 04 10 0b 01  payload=[10 0b 01...]        
+ 21  0x80  SUBMIT           0  08 aa 80 00 00 00 00 97 55 00  payload=[]
+ 22  0x1D  UNK_0x1D         3  0b aa 1d 00 00 00 03 10 0b 01  payload=[10 0b 01]
+ 23  0xFE  DEBUG_LOG        0  08 aa fe 00 00 00 00 5b 55 00  payload=[]
+ 24  0xFE  DEBUG_LOG        0  08 aa fe 00 00 00 00 5b 55 00  payload=[]
+
+Done!
+PS C:\Users\cesmag02\Documents\GitHub\BQ76920_Bridge> 
