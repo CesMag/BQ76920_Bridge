@@ -52,6 +52,7 @@ static volatile uint8_t cmdPending = 0U;
 static uint8_t cmdBuffer[BRIDGE_REPORT_SIZE];
 static uint8_t rspBuffer[BRIDGE_REPORT_SIZE];
 static PendingWrite_t pendingWrite;
+static BQ76920_t *bridgeBms = NULL;
 
 /* Debug ring buffer: log every command received */
 static uint8_t cmdLog[CMD_LOG_SIZE][CMD_LOG_BYTES];
@@ -66,6 +67,9 @@ static void EV2300_BuildRawResponse(uint8_t respCode,
                                      uint8_t crcSkipTail);
 static void EV2300_BuildErrorResponse(void);
 static void EV2300_SendResponse(void);
+static uint8_t Bridge_IsBqAddress(uint16_t addr);
+static HAL_StatusTypeDef Bridge_Read(uint16_t addr, uint8_t reg, uint8_t *data, uint16_t len);
+static HAL_StatusTypeDef Bridge_Write(uint16_t addr, uint8_t reg, const uint8_t *data, uint16_t len);
 static void Handle_ReadByte(uint16_t addr, uint8_t reg);
 static void Handle_ReadWord(uint16_t addr, uint8_t reg);
 static void Handle_ReadBlock(uint16_t addr, uint8_t reg);
@@ -77,7 +81,7 @@ static void Handle_Undocumented(uint8_t cmd);
 
 void Bridge_Init(BQ76920_t *bms)
 {
-  (void)bms;
+  bridgeBms = bms;
   cmdPending = 0U;
   memset(&pendingWrite, 0, sizeof(pendingWrite));
   USBD_HID_OutEventCallback = Bridge_HID_OutCallback;
@@ -268,6 +272,58 @@ static void EV2300_SendResponse(void)
   USBD_HID_SendReport(&hUsbDeviceFS, rspBuffer, BRIDGE_REPORT_SIZE);
 }
 
+static uint8_t Bridge_IsBqAddress(uint16_t addr)
+{
+  if (bridgeBms == NULL)
+  {
+    return 0U;
+  }
+
+  return (uint8_t)((addr == BQ76920_ADDR_NO_CRC)
+                || (addr == BQ76920_ADDR_CRC)
+                || (addr == bridgeBms->i2cAddr));
+}
+
+static HAL_StatusTypeDef Bridge_Read(uint16_t addr, uint8_t reg, uint8_t *data, uint16_t len)
+{
+  if (Bridge_IsBqAddress(addr) != 0U)
+  {
+    for (uint16_t i = 0U; i < len; i++)
+    {
+      HAL_StatusTypeDef st = BQ76920_ReadRegister(bridgeBms, (uint8_t)(reg + i), &data[i]);
+      if (st != HAL_OK)
+      {
+        return st;
+      }
+    }
+    return HAL_OK;
+  }
+
+  return HAL_I2C_Mem_Read(&hi2c1, addr, reg,
+                          I2C_MEMADD_SIZE_8BIT,
+                          data, len, I2C_TIMEOUT);
+}
+
+static HAL_StatusTypeDef Bridge_Write(uint16_t addr, uint8_t reg, const uint8_t *data, uint16_t len)
+{
+  if (Bridge_IsBqAddress(addr) != 0U)
+  {
+    for (uint16_t i = 0U; i < len; i++)
+    {
+      HAL_StatusTypeDef st = BQ76920_WriteRegister(bridgeBms, (uint8_t)(reg + i), data[i]);
+      if (st != HAL_OK)
+      {
+        return st;
+      }
+    }
+    return HAL_OK;
+  }
+
+  return HAL_I2C_Mem_Write(&hi2c1, addr, reg,
+                           I2C_MEMADD_SIZE_8BIT,
+                           (uint8_t *)data, len, I2C_TIMEOUT);
+}
+
 /* ---- I2C command handlers (use exact real EV2300 response codes) --------- */
 
 /**
@@ -280,9 +336,7 @@ static void EV2300_SendResponse(void)
 static void Handle_ReadByte(uint16_t addr, uint8_t reg)
 {
   uint8_t val;
-  HAL_StatusTypeDef st = HAL_I2C_Mem_Read(&hi2c1, addr, reg,
-                                           I2C_MEMADD_SIZE_8BIT,
-                                           &val, 1U, I2C_TIMEOUT);
+  HAL_StatusTypeDef st = Bridge_Read(addr, reg, &val, 1U);
   if (st == HAL_OK)
   {
     uint8_t payload[3] = {reg, val, (uint8_t)(addr >> 1U)};
@@ -304,9 +358,7 @@ static void Handle_ReadByte(uint16_t addr, uint8_t reg)
 static void Handle_ReadWord(uint16_t addr, uint8_t reg)
 {
   uint8_t buf[2];
-  HAL_StatusTypeDef st = HAL_I2C_Mem_Read(&hi2c1, addr, reg,
-                                           I2C_MEMADD_SIZE_8BIT,
-                                           buf, 2U, I2C_TIMEOUT);
+  HAL_StatusTypeDef st = Bridge_Read(addr, reg, buf, 2U);
   if (st == HAL_OK)
   {
     uint8_t payload[4] = {reg, buf[0], buf[1], (uint8_t)(addr >> 1U)};
@@ -337,9 +389,7 @@ static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
     if (reqLen == 0U) { reqLen = 2U; }
   }
 
-  HAL_StatusTypeDef st = HAL_I2C_Mem_Read(&hi2c1, addr, reg,
-                                           I2C_MEMADD_SIZE_8BIT,
-                                           data, reqLen, I2C_TIMEOUT);
+  HAL_StatusTypeDef st = Bridge_Read(addr, reg, data, reqLen);
   if (st == HAL_OK)
   {
     /* Match real EV2300: {block_count, first_data_byte, i2c_7bit_addr} */
@@ -450,27 +500,24 @@ static void Handle_Submit(void)
     case EV2300_CMD_WRITE_BYTE:
       if (pendingWrite.dataLen >= 1U)
       {
-        st = HAL_I2C_Mem_Write(&hi2c1, pendingWrite.i2cAddr, pendingWrite.reg,
-                                I2C_MEMADD_SIZE_8BIT,
-                                &pendingWrite.data[0], 1U, I2C_TIMEOUT);
+        st = Bridge_Write(pendingWrite.i2cAddr, pendingWrite.reg,
+                          &pendingWrite.data[0], 1U);
       }
       break;
 
     case EV2300_CMD_WRITE_WORD:
       if (pendingWrite.dataLen >= 2U)
       {
-        st = HAL_I2C_Mem_Write(&hi2c1, pendingWrite.i2cAddr, pendingWrite.reg,
-                                I2C_MEMADD_SIZE_8BIT,
-                                pendingWrite.data, 2U, I2C_TIMEOUT);
+        st = Bridge_Write(pendingWrite.i2cAddr, pendingWrite.reg,
+                          pendingWrite.data, 2U);
       }
       break;
 
     case EV2300_CMD_WRITE_BLOCK:
       if (pendingWrite.dataLen > 0U)
       {
-        st = HAL_I2C_Mem_Write(&hi2c1, pendingWrite.i2cAddr, pendingWrite.reg,
-                                I2C_MEMADD_SIZE_8BIT,
-                                pendingWrite.data, pendingWrite.dataLen, I2C_TIMEOUT);
+        st = Bridge_Write(pendingWrite.i2cAddr, pendingWrite.reg,
+                          pendingWrite.data, pendingWrite.dataLen);
       }
       break;
 

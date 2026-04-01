@@ -19,6 +19,8 @@ void setUp(void)
 
   /* Set up a BMS handle with known calibration values */
   bms.i2cHandle   = &hi2c_mock;
+  bms.i2cAddr     = BQ76920_ADDR_CRC;
+  bms.crcEnabled  = 1U;
   bms.numCells    = 5;
   bms.ovTrip_V    = 4.25f;
   bms.uvTrip_V    = 2.8f;

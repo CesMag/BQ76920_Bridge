@@ -21,20 +21,31 @@ target_include_directories(unity PUBLIC ${UNITY_DIR})
 add_library(mock_hal STATIC ${MOCK_DIR}/mock_hal_i2c.c)
 target_include_directories(mock_hal PUBLIC ${MOCK_DIR})
 
+set(TEST_MATH_LIB "")
+if(NOT MSVC)
+  set(TEST_MATH_LIB m)
+endif()
+
 # BQ76920 driver compiled for host (uses mock HAL instead of real HAL)
 add_library(bq76920_host STATIC ${CORE_SRC}/bq76920.c)
 target_include_directories(bq76920_host PUBLIC ${CORE_INC})
 target_include_directories(bq76920_host PRIVATE ${MOCK_DIR})
-target_link_libraries(bq76920_host PRIVATE mock_hal m)
+target_link_libraries(bq76920_host PRIVATE mock_hal ${TEST_MATH_LIB})
 
 # ---- Test: CRC-8 ----
 add_executable(test_crc8 unit/test_bq76920_crc8.c)
 target_include_directories(test_crc8 PRIVATE ${CORE_INC} ${MOCK_DIR})
-target_link_libraries(test_crc8 PRIVATE unity bq76920_host mock_hal m)
+target_link_libraries(test_crc8 PRIVATE unity bq76920_host mock_hal ${TEST_MATH_LIB})
 add_test(NAME CRC8 COMMAND test_crc8)
 
 # ---- Test: Voltage conversion ----
 add_executable(test_voltage unit/test_bq76920_voltage.c)
 target_include_directories(test_voltage PRIVATE ${CORE_INC} ${MOCK_DIR})
-target_link_libraries(test_voltage PRIVATE unity bq76920_host mock_hal m)
+target_link_libraries(test_voltage PRIVATE unity bq76920_host mock_hal ${TEST_MATH_LIB})
 add_test(NAME Voltage COMMAND test_voltage)
+
+# ---- Test: Transport / init behavior ----
+add_executable(test_protocol unit/test_bq76920_protocol.c)
+target_include_directories(test_protocol PRIVATE ${CORE_INC} ${MOCK_DIR})
+target_link_libraries(test_protocol PRIVATE unity bq76920_host mock_hal ${TEST_MATH_LIB})
+add_test(NAME Protocol COMMAND test_protocol)
