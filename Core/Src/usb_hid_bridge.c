@@ -53,7 +53,8 @@ static PendingWrite_t pendingWrite;
 
 static uint8_t EV2300_CRC8(const uint8_t *data, uint8_t len);
 static void EV2300_BuildRawResponse(uint8_t respCode,
-                                     const uint8_t *payload, uint8_t payloadLen);
+                                     const uint8_t *payload, uint8_t payloadLen,
+                                     uint8_t crcSkipTail);
 static void EV2300_BuildErrorResponse(void);
 static void EV2300_SendResponse(void);
 static void Handle_ReadByte(uint16_t addr, uint8_t reg);
@@ -175,16 +176,24 @@ static uint8_t EV2300_CRC8(const uint8_t *data, uint8_t len)
 
 /**
   * @brief  Build response with an EXACT response code (not computed)
-  * @param  respCode    Exact response byte (from real EV2300 protocol scan)
-  * @param  payload     Response payload
-  * @param  payloadLen  Payload length
+  * @param  respCode     Exact response byte (from real EV2300 protocol scan)
+  * @param  payload      Response payload
+  * @param  payloadLen   Payload length
+  * @param  crcSkipTail  Number of trailing payload bytes to EXCLUDE from CRC.
+  *                      Real EV2300 excludes the I2C address byte at the end
+  *                      of success payloads (crcSkipTail=1). Error responses
+  *                      include all payload bytes in CRC (crcSkipTail=0).
+  *                      Verified against real EV2300A captures 2026-04-01.
   */
 static void EV2300_BuildRawResponse(uint8_t respCode,
-                                     const uint8_t *payload, uint8_t payloadLen)
+                                     const uint8_t *payload, uint8_t payloadLen,
+                                     uint8_t crcSkipTail)
 {
   memset(rspBuffer, 0, BRIDGE_REPORT_SIZE);
 
-  uint8_t totalLen = (uint8_t)(2U + 1U + 3U + 1U + payloadLen + 1U + 1U);
+  /* FIX #1: totalLen = plen + 8 (was plen + 9, off by 1).
+   * Real EV2300 frame: AA(1)+cmd(1)+rsv(3)+plen(1)+payload(N)+CRC(1)+55(1) = N+8 */
+  uint8_t totalLen = (uint8_t)(payloadLen + 8U);
 
   rspBuffer[0] = totalLen;
   rspBuffer[1] = EV2300_FRAME_MARKER;
@@ -197,9 +206,13 @@ static void EV2300_BuildRawResponse(uint8_t respCode,
     memcpy(&rspBuffer[7], payload, payloadLen);
   }
 
-  uint8_t crcEnd = (uint8_t)(7U + payloadLen);
-  rspBuffer[crcEnd] = EV2300_CRC8(&rspBuffer[2], (uint8_t)(crcEnd - 2U));
-  rspBuffer[crcEnd + 1U] = EV2300_FRAME_END;
+  /* FIX #5: CRC excludes trailing I2C address byte for success responses.
+   * CRC covers: cmd + rsv(3) + plen + payload[0..plen-1-crcSkipTail]
+   * Error (crcSkipTail=0): 5 + plen bytes.  Success (crcSkipTail=1): 4 + plen bytes. */
+  uint8_t crcPos = (uint8_t)(7U + payloadLen);
+  uint8_t crcLen = (uint8_t)(5U + payloadLen - crcSkipTail);
+  rspBuffer[crcPos] = EV2300_CRC8(&rspBuffer[2], crcLen);
+  rspBuffer[crcPos + 1U] = EV2300_FRAME_END;
 }
 
 /**
@@ -210,7 +223,7 @@ static void EV2300_BuildRawResponse(uint8_t respCode,
 static void EV2300_BuildErrorResponse(void)
 {
   static const uint8_t errPayload[2] = {0x00U, 0x93U};
-  EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U);
+  EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U, 0U);
 }
 
 static void EV2300_SendResponse(void)
@@ -222,6 +235,10 @@ static void EV2300_SendResponse(void)
 
 /**
   * @brief  CMD 0x03 READ_BYTE -> response code 0x42 (real EV2300 quirk)
+  *         Payload format: {reg, data, i2c_7bit_addr} with crcSkipTail=1.
+  *         Note: BQ76920 doesn't support single-byte SMBus reads, so the real
+  *         EV2300 returns 0x46 error on BQ76920. Our HAL_I2C_Mem_Read with 1 byte
+  *         may succeed (raw I2C vs strict SMBus), which is fine for the DLL.
   */
 static void Handle_ReadByte(uint16_t addr, uint8_t reg)
 {
@@ -231,8 +248,8 @@ static void Handle_ReadByte(uint16_t addr, uint8_t reg)
                                            &val, 1U, I2C_TIMEOUT);
   if (st == HAL_OK)
   {
-    uint8_t payload[2] = {(uint8_t)addr, val};
-    EV2300_BuildRawResponse(0x42U, payload, 2U); /* Real EV2300: 0x42, not 0x43 */
+    uint8_t payload[3] = {reg, val, (uint8_t)(addr >> 1U)};
+    EV2300_BuildRawResponse(0x42U, payload, 3U, 1U);
   }
   else
   {
@@ -243,6 +260,9 @@ static void Handle_ReadByte(uint16_t addr, uint8_t reg)
 
 /**
   * @brief  CMD 0x01 READ_WORD -> response code 0x41
+  *         FIX #2: Real EV2300 payload = {reg, data_lo, data_hi, i2c_7bit_addr}
+  *         with plen=4 and crcSkipTail=1 (addr excluded from CRC).
+  *         Was: {i2c_8bit_addr, data_lo, data_hi} with plen=3.
   */
 static void Handle_ReadWord(uint16_t addr, uint8_t reg)
 {
@@ -252,8 +272,8 @@ static void Handle_ReadWord(uint16_t addr, uint8_t reg)
                                            buf, 2U, I2C_TIMEOUT);
   if (st == HAL_OK)
   {
-    uint8_t payload[3] = {(uint8_t)addr, buf[0], buf[1]};
-    EV2300_BuildRawResponse(0x41U, payload, 3U);
+    uint8_t payload[4] = {reg, buf[0], buf[1], (uint8_t)(addr >> 1U)};
+    EV2300_BuildRawResponse(0x41U, payload, 4U, 1U);
   }
   else
   {
@@ -264,22 +284,30 @@ static void Handle_ReadWord(uint16_t addr, uint8_t reg)
 
 /**
   * @brief  CMD 0x02 READ_BLOCK -> response code 0x42
+  *         Real EV2300 returns short format: {block_count, first_data_byte, addr7}
+  *         with plen=3 and crcSkipTail=1. Reads the SMBus block length byte first.
   */
 static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
 {
   uint8_t data[32];
-  uint8_t maxRead = 32U;
+  uint8_t reqLen = 2U; /* Default: read 2 bytes (SMBus word) */
+
+  /* If a block length was provided in the command, use it */
+  if (cmdBuffer[6] >= 3U)
+  {
+    reqLen = cmdBuffer[9];
+    if (reqLen > 32U) { reqLen = 32U; }
+    if (reqLen == 0U) { reqLen = 2U; }
+  }
 
   HAL_StatusTypeDef st = HAL_I2C_Mem_Read(&hi2c1, addr, reg,
                                            I2C_MEMADD_SIZE_8BIT,
-                                           data, maxRead, I2C_TIMEOUT);
+                                           data, reqLen, I2C_TIMEOUT);
   if (st == HAL_OK)
   {
-    uint8_t payload[34];
-    payload[0] = (uint8_t)addr;
-    payload[1] = maxRead;
-    memcpy(&payload[2], data, maxRead);
-    EV2300_BuildRawResponse(0x42U, payload, (uint8_t)(2U + maxRead));
+    /* Match real EV2300: {block_count, first_data_byte, i2c_7bit_addr} */
+    uint8_t payload[3] = {reqLen, data[0], (uint8_t)(addr >> 1U)};
+    EV2300_BuildRawResponse(0x42U, payload, 3U, 1U);
   }
   else
   {
@@ -357,7 +385,7 @@ static void Handle_WriteCommand(uint8_t cmd, const uint8_t *payload, uint8_t pay
   if (cmd != EV2300_CMD_WRITE_BYTE)
   {
     uint8_t errPayload[2] = {pendingWrite.reg, 0x93U};
-    EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U);
+    EV2300_BuildRawResponse(EV2300_CMD_ERROR, errPayload, 2U, 0U);
     EV2300_SendResponse();
   }
 }
@@ -424,14 +452,11 @@ static void Handle_Submit(void)
 
   pendingWrite.active = 0U;
 
-  if (st == HAL_OK)
-  {
-    EV2300_BuildRawResponse(0xC0U, submitPayload, 3U);
-  }
-  else
-  {
-    EV2300_BuildErrorResponse();
-  }
+  /* FIX #4: Real EV2300 ALWAYS returns 0xC0 success, even on I2C NACK.
+   * The DLL detects write failure through subsequent read-back, not SUBMIT.
+   * Verified: SUBMIT to invalid addr 0xFE returns 0xC0 on real EV2300. */
+  (void)st;
+  EV2300_BuildRawResponse(0xC0U, submitPayload, 3U, 0U);
   EV2300_SendResponse();
 }
 
@@ -460,10 +485,13 @@ static void Handle_Undocumented(uint8_t cmd)
        2026-04-01T01:37). All values are exact response codes and payloads captured
        from the real hardware. ────────────────────────────────────────────────────── */
 
+    /* Payloads ending in I2C 7-bit addr (0x08) use crcSkipTail=1.
+     * Error payloads (0x93 suffix) and others use crcSkipTail=0. */
+
     case 0x00U:
     {
       static const uint8_t p[] = {0x55U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x40U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x40U, p, (uint8_t)sizeof(p), 1U);
       EV2300_SendResponse();
       break;
     }
@@ -471,7 +499,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x01U:
     {
       static const uint8_t p[] = {0x55U, 0x00U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x41U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x41U, p, (uint8_t)sizeof(p), 1U);
       EV2300_SendResponse();
       break;
     }
@@ -479,22 +507,22 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x02U:
     {
       static const uint8_t p[] = {0x02U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x42U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x42U, p, (uint8_t)sizeof(p), 1U);
       EV2300_SendResponse();
       break;
     }
 
     /* 0x03 bare -> 0x46 error */
     case 0x03U:
-      EV2300_BuildRawResponse(0x46U, bareErr, 2U);
+      EV2300_BuildRawResponse(0x46U, bareErr, 2U, 0U);
       EV2300_SendResponse();
       break;
 
-    /* 0x0D -> 0x4E (I2C power/bus control) */
+    /* 0x0D -> 0x4E (I2C power/bus control, VERIFIED crcSkipTail=1) */
     case 0x0DU:
     {
       static const uint8_t p[] = {0x02U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x4EU, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x4EU, p, (uint8_t)sizeof(p), 1U);
       EV2300_SendResponse();
       break;
     }
@@ -502,19 +530,19 @@ static void Handle_Undocumented(uint8_t cmd)
     /* 0x0E, 0x0F bare -> 0x46 error */
     case 0x0EU:
     case 0x0FU:
-      EV2300_BuildRawResponse(0x46U, bareErr, 2U);
+      EV2300_BuildRawResponse(0x46U, bareErr, 2U, 0U);
       EV2300_SendResponse();
       break;
 
     case 0x10U:
-      EV2300_BuildRawResponse(0x10U, bareErr, 2U);
+      EV2300_BuildRawResponse(0x10U, bareErr, 2U, 0U);
       EV2300_SendResponse();
       break;
 
     case 0x11U:
     {
       static const uint8_t p[] = {0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x50U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x50U, p, (uint8_t)sizeof(p), 1U);
       EV2300_SendResponse();
       break;
     }
@@ -522,7 +550,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x12U:
     {
       static const uint8_t p[] = {0xF6U, 0x00U, 0xFDU};
-      EV2300_BuildRawResponse(0x4AU, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x4AU, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -530,7 +558,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x14U:
     {
       static const uint8_t p[] = {0xBDU, 0x00U, 0x00U, 0x0AU};
-      EV2300_BuildRawResponse(0x4BU, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x4BU, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -538,7 +566,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x16U:
     {
       static const uint8_t p[] = {0x79U, 0x00U, 0xFDU};
-      EV2300_BuildRawResponse(0x4CU, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x4CU, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -546,21 +574,21 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x19U:
     {
       static const uint8_t p[] = {0x55U, 0x00U, 0x02U};
-      EV2300_BuildRawResponse(0x51U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x51U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
 
     /* 0x1A bare -> 0x46 error */
     case 0x1AU:
-      EV2300_BuildRawResponse(0x46U, bareErr, 2U);
+      EV2300_BuildRawResponse(0x46U, bareErr, 2U, 0U);
       EV2300_SendResponse();
       break;
 
     case 0x1DU:
     {
       static const uint8_t p[] = {0x55U, 0x00U, 0x02U};
-      EV2300_BuildRawResponse(0x52U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x52U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -568,19 +596,19 @@ static void Handle_Undocumented(uint8_t cmd)
     /* 0x1E, 0x20 bare -> 0x46 error */
     case 0x1EU:
     case 0x20U:
-      EV2300_BuildRawResponse(0x46U, bareErr, 2U);
+      EV2300_BuildRawResponse(0x46U, bareErr, 2U, 0U);
       EV2300_SendResponse();
       break;
 
     case 0x22U:
-      EV2300_BuildRawResponse(0x22U, bareErr, 2U);
+      EV2300_BuildRawResponse(0x22U, bareErr, 2U, 0U);
       EV2300_SendResponse();
       break;
 
     case 0x23U:
     {
       static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
-      EV2300_BuildRawResponse(0x53U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x53U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -588,7 +616,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x24U:
     {
       static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
-      EV2300_BuildRawResponse(0x24U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x24U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -596,7 +624,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x30U:
     {
       static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
-      EV2300_BuildRawResponse(0x30U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x30U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -604,7 +632,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x40U:
     {
       static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
-      EV2300_BuildRawResponse(0x40U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x40U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -612,7 +640,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x41U:
     {
       static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
-      EV2300_BuildRawResponse(0x41U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x41U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -620,7 +648,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x42U:
     {
       static const uint8_t p[] = {0xC2U, 0x00U, 0x00U};
-      EV2300_BuildRawResponse(0x42U, p, (uint8_t)sizeof(p));
+      EV2300_BuildRawResponse(0x42U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -635,7 +663,7 @@ static void Handle_Undocumented(uint8_t cmd)
         0x09U, 0x04U, 0x00U, 0x00U, 0x01U, 0xFFU, 0x00U, 0x00U, 0x00U,
         0x07U, 0x05U, 0x01U, 0x02U, 0x40U, 0x00U, 0x00U,
       };
-      EV2300_BuildRawResponse(0x60U, desc, (uint8_t)sizeof(desc));
+      EV2300_BuildRawResponse(0x60U, desc, (uint8_t)sizeof(desc), 0U);
       EV2300_SendResponse();
       break;
     }
