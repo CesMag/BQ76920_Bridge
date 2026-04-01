@@ -4,7 +4,7 @@
 
 **Instructor:** Tom Munns | **Spring 2026**
 
-**Author**: Cesar Magana
+**Author**: Cesar Magana & Brighton Sikarskie
 
 ---
 
