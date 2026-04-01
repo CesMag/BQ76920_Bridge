@@ -120,8 +120,17 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     Bridge_ProcessCommand();
-    HAL_GPIO_TogglePin(GPIOC, LED_Pin);
-    HAL_Delay(500);
+
+    /* Non-blocking LED heartbeat: toggle every 500ms without blocking the loop */
+    {
+      static uint32_t lastToggle = 0;
+      uint32_t now = HAL_GetTick();
+      if (now - lastToggle >= 500U)
+      {
+        HAL_GPIO_TogglePin(GPIOC, LED_Pin);
+        lastToggle = now;
+      }
+    }
   }
   /* USER CODE END 3 */
 }

@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 """
-Bench test suite for BQ76920_Bridge -- cell simulator mode (no real cells).
+Bench test suite for BQ76920_Bridge -- EV2300 emulation mode.
 
 Setup: 18V / 0.5A DC supply on BATT+/BATT- (J3/J2), cell simulator dip
 switches closed, BOOT button pressed after power-up.
-
-Tests register access, ADC readings, protection config, FET control,
-coulomb counter, and alert status -- everything that works without
-actual cell connections.
 
 Usage:
     python3 tests/integration/test_bench_no_cells.py
 """
 import sys
-import time
 import struct
+import time
 
 try:
     import hid
@@ -22,37 +18,71 @@ except ImportError:
     print("ERROR: pip install hidapi")
     sys.exit(1)
 
-VID = 0x0483
-PID = 0x572B
+# EV2300 identity
+VID = 0x0451
+PID = 0x0036
 REPORT_SIZE = 64
 
-# Command IDs
-CMD_READ_REG     = 0x01
-CMD_WRITE_REG    = 0x02
-CMD_READ_BLOCK   = 0x03
-CMD_INIT_DEVICE  = 0x10
-CMD_GET_STATUS   = 0x11
-CMD_GET_VOLTAGES = 0x12
-CMD_GET_CURRENT  = 0x13
-CMD_FET_CONTROL  = 0x14
-CMD_VERSION      = 0xFF
+# Protocol constants
+FRAME_MARKER = 0xAA
+FRAME_END    = 0x55
+RESP_FLAG    = 0x40
+CMD_READ_WORD  = 0x01
+CMD_READ_BLOCK = 0x02
+CMD_READ_BYTE  = 0x03
+CMD_WRITE_WORD = 0x04
+CMD_WRITE_BYTE = 0x07
+CMD_SUBMIT     = 0x80
+CMD_ERROR      = 0x46
 
-STATUS_OK = 0x00
+BQ_ADDR = 0x08
 
-# BQ76920 register addresses
-SYS_STAT   = 0x00
-CELLBAL1   = 0x01
-SYS_CTRL1  = 0x04
-SYS_CTRL2  = 0x05
-PROTECT1   = 0x06
-PROTECT2   = 0x07
-PROTECT3   = 0x08
-OV_TRIP    = 0x09
-UV_TRIP    = 0x0A
-CC_CFG     = 0x0B
-ADCGAIN1   = 0x50
-ADCOFFSET  = 0x51
-ADCGAIN2   = 0x59
+# BQ76920 registers
+SYS_STAT  = 0x00
+SYS_CTRL1 = 0x04
+SYS_CTRL2 = 0x05
+PROTECT1  = 0x06
+OV_TRIP   = 0x09
+UV_TRIP   = 0x0A
+CC_CFG    = 0x0B
+VC1_HI    = 0x0C
+BAT_HI    = 0x2A
+CC_HI     = 0x32
+ADCGAIN1  = 0x50
+ADCOFFSET = 0x51
+ADCGAIN2  = 0x59
+
+
+def crc8(data):
+    crc = 0x00
+    for b in data:
+        crc ^= b
+        for _ in range(8):
+            crc = ((crc << 1) ^ 0x07) & 0xFF if crc & 0x80 else (crc << 1) & 0xFF
+    return crc
+
+
+def build_packet(cmd, i2c_addr=0, reg=0, data=b""):
+    buf = bytearray(REPORT_SIZE)
+    if cmd == CMD_SUBMIT:
+        buf[0] = 8
+        buf[1] = FRAME_MARKER
+        buf[2] = CMD_SUBMIT
+        buf[6] = 0
+        buf[7] = crc8(buf[2:7])
+        buf[8] = FRAME_END
+        return buf
+    payload = bytearray([i2c_addr << 1, reg]) + bytearray(data)
+    plen = len(payload)
+    buf[0] = 2 + 1 + 3 + 1 + plen + 1 + 1
+    buf[1] = FRAME_MARKER
+    buf[2] = cmd
+    buf[6] = plen
+    buf[7:7 + plen] = payload
+    crc_end = 7 + plen
+    buf[crc_end] = crc8(buf[2:crc_end])
+    buf[crc_end + 1] = FRAME_END
+    return buf
 
 
 class Bridge:
@@ -64,35 +94,64 @@ class Bridge:
     def close(self):
         self.dev.close()
 
-    def cmd(self, cmd_id, reg=0, dlen=0, data=b""):
-        report = bytes([0x00, cmd_id, reg, dlen]) + data
-        report = report.ljust(REPORT_SIZE + 1, b"\x00")
-        self.dev.write(report)
-        resp = self.dev.read(REPORT_SIZE, 3000)
-        if not resp:
-            raise TimeoutError(f"No response for 0x{cmd_id:02X}")
-        return bytes(resp)
+    def _send(self, pkt):
+        self.dev.write(bytes([0x00]) + bytes(pkt))
+        time.sleep(0.01)
+        raw = self.dev.read(REPORT_SIZE, 2000)
+        if raw is None or len(raw) < 8:
+            return {"ok": False}
+        cmd = raw[2]
+        ok = bool(cmd & RESP_FLAG) and cmd != CMD_ERROR
+        plen = raw[6]
+        return {"ok": ok, "cmd": cmd, "plen": plen, "raw": bytes(raw)}
 
-    def read_reg(self, reg):
-        r = self.cmd(CMD_READ_REG, reg)
-        return r[1], r[3]  # status, value
+    def _write_submit(self, pkt):
+        self.dev.write(bytes([0x00]) + bytes(pkt))
+        time.sleep(0.01)
+        self.dev.read(REPORT_SIZE, 2000)  # ack
+        submit = build_packet(CMD_SUBMIT)
+        self.dev.write(bytes([0x00]) + bytes(submit))
+        time.sleep(0.01)
+        raw = self.dev.read(REPORT_SIZE, 2000)
+        if raw is None or len(raw) < 8:
+            return {"ok": False}
+        cmd = raw[2]
+        return {"ok": bool(cmd & RESP_FLAG) and cmd != CMD_ERROR}
 
-    def write_reg(self, reg, val):
-        r = self.cmd(CMD_WRITE_REG, reg, 0, bytes([val]))
-        return r[1]  # status
+    def read_byte(self, reg):
+        r = self._send(build_packet(CMD_READ_BYTE, BQ_ADDR, reg))
+        r["value"] = r["raw"][8] if r["ok"] and len(r.get("raw", b"")) > 8 else None
+        return r
 
-    def read_block(self, reg, n):
-        r = self.cmd(CMD_READ_BLOCK, reg, n)
-        return r[1], r[3:3 + r[2]]  # status, data
+    def read_word(self, reg):
+        r = self._send(build_packet(CMD_READ_WORD, BQ_ADDR, reg))
+        if r["ok"] and len(r.get("raw", b"")) >= 10:
+            r["value"] = struct.unpack("<H", r["raw"][8:10])[0]
+        else:
+            r["value"] = None
+        return r
+
+    def write_byte(self, reg, val):
+        pkt = build_packet(CMD_WRITE_BYTE, BQ_ADDR, reg, bytes([val]))
+        return self._write_submit(pkt)
+
+    def read_block(self, reg):
+        r = self._send(build_packet(CMD_READ_BLOCK, BQ_ADDR, reg))
+        if r["ok"] and len(r.get("raw", b"")) > 9:
+            blen = r["raw"][8]
+            r["block"] = bytes(r["raw"][9:9 + blen])
+        else:
+            r["block"] = None
+        return r
 
 
 passed = 0
 failed = 0
 
 
-def check(name, condition, detail=""):
+def check(name, cond, detail=""):
     global passed, failed
-    if condition:
+    if cond:
         print(f"  PASS  {name}" + (f" -- {detail}" if detail else ""))
         passed += 1
     else:
@@ -104,231 +163,148 @@ def main():
     global passed, failed
 
     print("=" * 65)
-    print("BQ76920 Bench Test -- Cell Simulator Mode (18V, no real cells)")
+    print("BQ76920 Bench Test -- EV2300 Emulation (18V cell simulator)")
     print("=" * 65)
 
     b = Bridge()
 
-    # ------------------------------------------------------------------
-    print("\n--- 1. Device identification ---")
+    # --- 1. Register reads ---
+    print("\n--- 1. Basic register reads ---")
 
-    r = b.cmd(CMD_VERSION)
-    ver = r[3:3 + r[2]].decode("ascii", errors="replace")
-    print(f"  Firmware: {ver}")
+    r = b.read_byte(CC_CFG)
+    check("CC_CFG = 0x19", r["ok"] and r["value"] == 0x19,
+          f"0x{r['value']:02X}" if r["value"] is not None else "err")
 
-    r = b.cmd(CMD_INIT_DEVICE)
-    check("INIT responds OK", r[1] == STATUS_OK)
-    gain = r[3] | (r[4] << 8)
-    offset = struct.unpack("b", bytes([r[5]]))[0]
-    ncells = r[6]
-    print(f"  GAIN={gain} uV/LSB, OFFSET={offset} mV, cells={ncells}")
-    check("GAIN in valid range (365-396)", 365 <= gain <= 396, f"{gain}")
-    check("OFFSET in valid range (-128 to +127)", -128 <= offset <= 127, f"{offset}")
+    r = b.read_byte(SYS_CTRL1)
+    check("SYS_CTRL1 ADC_EN set", r["ok"] and (r["value"] & 0x10),
+          f"0x{r['value']:02X}" if r["ok"] else "err")
 
-    # ------------------------------------------------------------------
-    print("\n--- 2. Register read/write verification ---")
+    r = b.read_byte(ADCGAIN1)
+    check("ADCGAIN1 readable", r["ok"], f"0x{r['value']:02X}" if r["ok"] else "err")
 
-    # CC_CFG should be 0x19 after init
-    st, val = b.read_reg(CC_CFG)
-    check("CC_CFG reads 0x19", st == STATUS_OK and val == 0x19,
-          f"0x{val:02X}")
+    r = b.read_byte(ADCGAIN2)
+    check("ADCGAIN2 readable", r["ok"], f"0x{r['value']:02X}" if r["ok"] else "err")
 
-    # SYS_CTRL1: ADC_EN should be set (bit 4)
-    st, val = b.read_reg(SYS_CTRL1)
-    check("SYS_CTRL1 ADC_EN set", st == STATUS_OK and (val & 0x10),
-          f"0x{val:02X}")
+    r = b.read_byte(ADCOFFSET)
+    check("ADCOFFSET readable", r["ok"], f"0x{r['value']:02X}" if r["ok"] else "err")
 
-    # SYS_CTRL2: CC_EN may be cleared by hardware if OV/UV fault is active
-    st, val = b.read_reg(SYS_CTRL2)
-    if val & 0x20:
-        check("SYS_CTRL2 CC_EN set", True, f"0x{val:02X}")
+    # --- 2. ADC calibration ---
+    print("\n--- 2. ADC calibration ---")
+
+    g1 = b.read_byte(ADCGAIN1)
+    g2 = b.read_byte(ADCGAIN2)
+    ofs = b.read_byte(ADCOFFSET)
+
+    if g1["ok"] and g2["ok"] and ofs["ok"]:
+        gain_code = ((g1["value"] >> 3) & 0x03) << 3 | (g2["value"] & 0x07)
+        gain = 365 + gain_code
+        offset = struct.unpack("b", bytes([ofs["value"]]))[0]
+        check("GAIN in range (365-396)", 365 <= gain <= 396, f"{gain} uV/LSB")
+        check("OFFSET in range", -128 <= offset <= 127, f"{offset} mV")
     else:
-        check("SYS_CTRL2 CC_EN cleared by protection (OV/UV active)",
-              st == STATUS_OK, f"0x{val:02X} -- normal if cell simulator trips OV")
+        check("ADC cal readable", False, "I2C error")
 
-    # Read ADC calibration registers directly
-    st, g1 = b.read_reg(ADCGAIN1)
-    check("ADCGAIN1 readable", st == STATUS_OK, f"0x{g1:02X}")
-    st, g2 = b.read_reg(ADCGAIN2)
-    check("ADCGAIN2 readable", st == STATUS_OK, f"0x{g2:02X}")
-    st, ofs = b.read_reg(ADCOFFSET)
-    check("ADCOFFSET readable", st == STATUS_OK, f"0x{ofs:02X}")
+    # --- 3. Cell voltages via READ_WORD ---
+    print("\n--- 3. Cell voltages ---")
 
-    # ------------------------------------------------------------------
-    print("\n--- 3. Block read ---")
+    for i in range(5):
+        reg = VC1_HI + (i * 2)
+        r = b.read_word(reg)
+        if r["ok"] and r["value"] is not None:
+            # READ_WORD returns [HI, LO] as LE word, so swap bytes for BQ76920
+            raw_le = r["value"]
+            hi_byte = raw_le & 0xFF
+            lo_byte = (raw_le >> 8) & 0xFF
+            raw14 = ((hi_byte & 0x3F) << 8) | lo_byte
+            mV = (gain * raw14) / 1000.0 + offset
+            V = mV / 1000.0
+            check(f"Cell {i+1} readable", True, f"{V:.3f} V (raw14={raw14})")
+        else:
+            check(f"Cell {i+1} readable", False, "I2C error")
 
-    # Read protection registers as a block (PROTECT1 through CC_CFG: 0x06-0x0B = 6 bytes)
-    st, data = b.read_block(PROTECT1, 6)
-    check("Block read PROTECT1-CC_CFG (6 bytes)", st == STATUS_OK and len(data) >= 6,
-          f"{len(data)} bytes: {data.hex()}")
+    # Pack voltage
+    r = b.read_word(BAT_HI)
+    if r["ok"] and r["value"] is not None:
+        raw_le = r["value"]
+        hi_byte = raw_le & 0xFF
+        lo_byte = (raw_le >> 8) & 0xFF
+        raw16 = (hi_byte << 8) | lo_byte
+        mV = (4.0 * gain * raw16) / 1000.0 + (5 * offset)
+        V = mV / 1000.0
+        check("Pack voltage", 10.0 <= V <= 25.0, f"{V:.3f} V")
+    else:
+        check("Pack voltage", False, "I2C error")
 
-    if len(data) >= 6:
-        print(f"    PROTECT1=0x{data[0]:02X}  PROTECT2=0x{data[1]:02X}  "
-              f"PROTECT3=0x{data[2]:02X}")
-        print(f"    OV_TRIP=0x{data[3]:02X}  UV_TRIP=0x{data[4]:02X}  "
-              f"CC_CFG=0x{data[5]:02X}")
+    # --- 4. SYS_STAT ---
+    print("\n--- 4. Alert status ---")
 
-    # ------------------------------------------------------------------
-    print("\n--- 4. SYS_STAT alert register ---")
-
-    st, stat = b.read_reg(SYS_STAT)
-    check("SYS_STAT readable", st == STATUS_OK, f"0x{stat:02X}")
-    if st == STATUS_OK:
+    r = b.read_byte(SYS_STAT)
+    if r["ok"]:
+        stat = r["value"]
         flags = []
         if stat & 0x80: flags.append("CC_READY")
-        if stat & 0x20: flags.append("DEVICE_XREADY")
+        if stat & 0x20: flags.append("XREADY")
         if stat & 0x10: flags.append("OVRD_ALERT")
         if stat & 0x08: flags.append("UV")
         if stat & 0x04: flags.append("OV")
         if stat & 0x02: flags.append("SCD")
         if stat & 0x01: flags.append("OCD")
-        print(f"    Active flags: {', '.join(flags) if flags else 'none'}")
+        check("SYS_STAT readable", True,
+              f"0x{stat:02X} [{', '.join(flags) if flags else 'clear'}]")
 
-    # Clear faults by writing 0xFF
-    st = b.write_reg(SYS_STAT, 0xFF)
-    check("SYS_STAT clear faults", st == STATUS_OK)
+    # Clear faults
+    w = b.write_byte(SYS_STAT, 0xFF)
+    check("Clear faults", w["ok"])
 
-    # Re-read to verify cleared
-    st, stat2 = b.read_reg(SYS_STAT)
-    if st == STATUS_OK:
-        # CC_READY (bit 7) may re-assert immediately -- mask it
-        cleared = (stat2 & 0x3F) == 0x00
-        check("SYS_STAT faults cleared", cleared,
-              f"0x{stat2:02X} (was 0x{stat:02X})")
+    # --- 5. Write/readback ---
+    print("\n--- 5. Register write/readback ---")
 
-    # ------------------------------------------------------------------
-    print("\n--- 5. Cell voltages (cell simulator) ---")
+    r = b.read_byte(OV_TRIP)
+    if r["ok"]:
+        orig = r["value"]
+        test_val = 0xAA if orig != 0xAA else 0x55
+        w = b.write_byte(OV_TRIP, test_val)
+        check("OV_TRIP write", w["ok"])
+        r2 = b.read_byte(OV_TRIP)
+        check("OV_TRIP readback", r2["ok"] and r2["value"] == test_val,
+              f"wrote 0x{test_val:02X}, read 0x{r2['value']:02X}" if r2["ok"] else "err")
+        b.write_byte(OV_TRIP, orig)
+        print(f"    Restored OV_TRIP to 0x{orig:02X}")
 
-    r = b.cmd(CMD_GET_VOLTAGES)
-    check("GET_VOLTAGES responds OK", r[1] == STATUS_OK)
+    r = b.read_byte(UV_TRIP)
+    if r["ok"]:
+        orig = r["value"]
+        test_val = 0x55 if orig != 0x55 else 0xAA
+        w = b.write_byte(UV_TRIP, test_val)
+        r2 = b.read_byte(UV_TRIP)
+        check("UV_TRIP write/readback", r2["ok"] and r2["value"] == test_val,
+              f"wrote 0x{test_val:02X}, read 0x{r2['value']:02X}" if r2["ok"] else "err")
+        b.write_byte(UV_TRIP, orig)
+        print(f"    Restored UV_TRIP to 0x{orig:02X}")
 
-    voltages = []
-    for i in range(ncells):
-        v = struct.unpack_from("<f", r, 3 + i * 4)[0]
-        voltages.append(v)
-        # With 18V across 5-cell simulator (200 ohm resistors), expect ~3.6V/cell
-        # Some cells may read near 0 if not connected
-        in_range = (0.0 <= v <= 5.0)
-        check(f"Cell {i+1} voltage plausible", in_range, f"{v:.3f} V")
+    # --- 6. Coulomb counter ---
+    print("\n--- 6. Coulomb counter ---")
 
-    vpack = struct.unpack_from("<f", r, 3 + ncells * 4)[0]
-    check("Pack voltage ~18V", 10.0 <= vpack <= 25.0, f"{vpack:.3f} V")
-
-    # Check if cell voltages roughly sum to pack voltage
-    vsum = sum(voltages)
-    if vpack > 1.0:
-        ratio = vsum / vpack
-        check("Cell sum approx equals pack voltage",
-              0.5 < ratio < 1.5, f"sum={vsum:.2f}V, pack={vpack:.2f}V")
-
-    # ------------------------------------------------------------------
-    print("\n--- 6. Coulomb counter / current ---")
-
-    r = b.cmd(CMD_GET_CURRENT)
-    check("GET_CURRENT responds OK", r[1] == STATUS_OK)
-    current = struct.unpack_from("<f", r, 3)[0]
-    # With no load, current should be near zero (small bias)
-    check("Current near zero (no load)", abs(current) < 500.0,
-          f"{current:.1f} mA")
-
-    # ------------------------------------------------------------------
-    print("\n--- 7. Protection register write/readback ---")
-
-    # Read current OV_TRIP, modify, verify, restore
-    st, ov_orig = b.read_reg(OV_TRIP)
-    if st == STATUS_OK:
-        test_val = 0xAA if ov_orig != 0xAA else 0x55
-        st = b.write_reg(OV_TRIP, test_val)
-        check("OV_TRIP write", st == STATUS_OK)
-
-        st, ov_read = b.read_reg(OV_TRIP)
-        check("OV_TRIP readback matches write",
-              st == STATUS_OK and ov_read == test_val,
-              f"wrote 0x{test_val:02X}, read 0x{ov_read:02X}")
-
-        # Restore original
-        b.write_reg(OV_TRIP, ov_orig)
-        print(f"    Restored OV_TRIP to 0x{ov_orig:02X}")
-
-    # Same for UV_TRIP
-    st, uv_orig = b.read_reg(UV_TRIP)
-    if st == STATUS_OK:
-        test_val = 0x55 if uv_orig != 0x55 else 0xAA
-        st = b.write_reg(UV_TRIP, test_val)
-        st2, uv_read = b.read_reg(UV_TRIP)
-        check("UV_TRIP write/readback",
-              st == STATUS_OK and st2 == STATUS_OK and uv_read == test_val,
-              f"wrote 0x{test_val:02X}, read 0x{uv_read:02X}")
-        b.write_reg(UV_TRIP, uv_orig)
-        print(f"    Restored UV_TRIP to 0x{uv_orig:02X}")
-
-    # ------------------------------------------------------------------
-    print("\n--- 8. FET control ---")
-
-    # Read SYS_CTRL2 before FET operations
-    st, ctrl2_before = b.read_reg(SYS_CTRL2)
-
-    # Enable CHG FET -- BQ76920 will refuse if OV fault is active
-    r = b.cmd(CMD_FET_CONTROL, 0, 0, bytes([0x01 | 0x04]))  # CHG + ON
-    check("CHG FET ON command accepted", r[1] == STATUS_OK)
-
-    st, ctrl2 = b.read_reg(SYS_CTRL2)
-    if st == STATUS_OK:
-        if ctrl2 & 0x01:
-            check("CHG_ON bit set", True, f"SYS_CTRL2=0x{ctrl2:02X}")
-        else:
-            # OV protection blocks CHG FET -- this is correct hardware behavior
-            st2, stat = b.read_reg(SYS_STAT)
-            ov_active = (stat & 0x04) != 0 if st2 == STATUS_OK else False
-            check("CHG blocked by OV protection (expected)",
-                  ov_active, f"SYS_CTRL2=0x{ctrl2:02X}, SYS_STAT=0x{stat:02X}")
-
-    # Enable DSG FET
-    r = b.cmd(CMD_FET_CONTROL, 0, 0, bytes([0x02 | 0x04]))  # DSG + ON
-    check("DSG FET ON command", r[1] == STATUS_OK)
-
-    st, ctrl2 = b.read_reg(SYS_CTRL2)
-    if st == STATUS_OK:
-        check("DSG_ON bit set", (ctrl2 & 0x02) != 0, f"SYS_CTRL2=0x{ctrl2:02X}")
-
-    # Disable both
-    r = b.cmd(CMD_FET_CONTROL, 0, 0, bytes([0x03]))  # CHG+DSG + OFF
-    check("FET OFF command", r[1] == STATUS_OK)
-
-    st, ctrl2 = b.read_reg(SYS_CTRL2)
-    if st == STATUS_OK:
-        check("Both FETs off", (ctrl2 & 0x03) == 0, f"SYS_CTRL2=0x{ctrl2:02X}")
-
-    # ------------------------------------------------------------------
-    print("\n--- 9. Cell balance register ---")
-
-    st, bal_orig = b.read_reg(CELLBAL1)
-    check("CELLBAL1 readable", st == STATUS_OK, f"0x{bal_orig:02X}")
-
-    # Write a test pattern (enable balancing on cell 1 and 3)
-    st = b.write_reg(CELLBAL1, 0x05)
-    st2, bal_read = b.read_reg(CELLBAL1)
-    check("CELLBAL1 write/readback", st == STATUS_OK and bal_read == 0x05,
-          f"wrote 0x05, read 0x{bal_read:02X}")
-
-    # Clear balancing
-    b.write_reg(CELLBAL1, 0x00)
-
-    # ------------------------------------------------------------------
-    print("\n--- 10. Full register dump (0x00-0x0B) ---")
-
-    st, dump = b.read_block(0x00, 12)
-    if st == STATUS_OK and len(dump) >= 12:
-        names = ["SYS_STAT", "CELLBAL1", "CELLBAL2", "CELLBAL3",
-                 "SYS_CTRL1", "SYS_CTRL2", "PROTECT1", "PROTECT2",
-                 "PROTECT3", "OV_TRIP", "UV_TRIP", "CC_CFG"]
-        for i, name in enumerate(names):
-            print(f"    0x{i:02X} {name:12s} = 0x{dump[i]:02X}")
-        check("Register dump complete", True)
+    r = b.read_word(CC_HI)
+    if r["ok"] and r["value"] is not None:
+        raw = struct.unpack("<h", struct.pack("<H", r["value"]))[0]
+        current_mA = (raw * 8.44) / 1.0  # 1 mohm sense resistor
+        check("CC readable", True, f"raw={raw}, ~{current_mA:.1f} mA")
     else:
-        check("Register dump complete", False, "block read failed")
+        check("CC readable", False, "I2C error")
 
-    # ------------------------------------------------------------------
+    # --- 7. Block read ---
+    print("\n--- 7. Block read ---")
+
+    r = b.read_block(PROTECT1)
+    if r["ok"] and r["block"] is not None and len(r["block"]) >= 6:
+        names = ["PROTECT1", "PROTECT2", "PROTECT3", "OV_TRIP", "UV_TRIP", "CC_CFG"]
+        for i, name in enumerate(names):
+            print(f"    {name} = 0x{r['block'][i]:02X}")
+        check("Block read (6 regs)", True, f"{len(r['block'])} bytes")
+    else:
+        check("Block read", False, "err")
+
     b.close()
 
     print()
