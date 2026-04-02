@@ -11,9 +11,9 @@ runs:
         sudo apt-get install -y --no-install-recommends \
           gcc-arm-none-eabi \
           binutils-arm-none-eabi \
+          libnewlib-arm-none-eabi \
           cmake \
           ninja-build \
-          cppcheck \
           python3
         arm-none-eabi-gcc --version
         cmake --version
