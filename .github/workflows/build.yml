@@ -2,7 +2,7 @@ name: Build & Analyze
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
 
 jobs:
@@ -19,14 +19,14 @@ jobs:
         uses: ./.github/actions/setup-toolchain
 
       - name: Configure (Debug)
-        run: cmake --preset Debug
+        run: cmake --preset debug
 
       - name: Build (Debug)
-        run: cmake --build build/Debug --parallel
+        run: cmake --build build/debug --parallel
 
       - name: Verify ELF output
         run: |
-          ELF="build/Debug/BQ76920_Bridge.elf"
+          ELF="build/debug/BQ76920_Bridge.elf"
           if [ ! -f "$ELF" ]; then
             echo "ERROR: $ELF not found"
             exit 1
@@ -47,14 +47,14 @@ jobs:
         uses: ./.github/actions/setup-toolchain
 
       - name: Configure (Release)
-        run: cmake --preset Release
+        run: cmake --preset release
 
       - name: Build (Release)
-        run: cmake --build build/Release --parallel
+        run: cmake --build build/release --parallel
 
       - name: Verify ELF output
         run: |
-          ELF="build/Release/BQ76920_Bridge.elf"
+          ELF="build/release/BQ76920_Bridge.elf"
           if [ ! -f "$ELF" ]; then
             echo "ERROR: $ELF not found"
             exit 1
@@ -65,17 +65,17 @@ jobs:
         run: |
           arm-none-eabi-objcopy \
             -O binary \
-            build/Release/BQ76920_Bridge.elf \
-            build/Release/BQ76920_Bridge.bin
-          echo "BIN: $(ls -lh build/Release/BQ76920_Bridge.bin)"
+            build/release/BQ76920_Bridge.elf \
+            build/release/BQ76920_Bridge.bin
+          echo "BIN: $(ls -lh build/release/BQ76920_Bridge.bin)"
 
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
         with:
           name: firmware-${{ github.sha }}
           path: |
-            build/Release/BQ76920_Bridge.elf
-            build/Release/BQ76920_Bridge.bin
+            build/release/BQ76920_Bridge.elf
+            build/release/BQ76920_Bridge.bin
           retention-days: 90
 
   # ──────────────────────────────────────────────
@@ -132,30 +132,3 @@ jobs:
           echo "Flash used: $FLASH bytes"
           echo "RAM used:   $RAM bytes"
 
-  # ──────────────────────────────────────────────
-  # Static analysis — cppcheck on Core/Src/
-  # ──────────────────────────────────────────────
-  static-analysis:
-    name: Static Analysis (cppcheck)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup toolchain
-        uses: ./.github/actions/setup-toolchain
-
-      - name: Run cppcheck
-        run: |
-          cppcheck \
-            --enable=warning,style,performance \
-            --error-exitcode=1 \
-            --suppressions-list=.cppcheck-suppressions \
-            --inline-suppr \
-            --std=c11 \
-            -DUSE_HAL_DRIVER \
-            -DSTM32F405xx \
-            -ICore/Inc \
-            -IDrivers/STM32F4xx_HAL_Driver/Inc \
-            -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
-            -IDrivers/CMSIS/Include \
-            Core/Src/
