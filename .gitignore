@@ -41,3 +41,4 @@ __pycache__/
 # CMakePresets.json   — tracked (CI and local builds depend on it)
 # BQ76920_Bridge.ioc  — tracked (CubeMX source of truth)
 # cmake/              — tracked (toolchain and generated CMakeLists.txt)
+.metadata/

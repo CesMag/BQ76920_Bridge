@@ -75,31 +75,38 @@ Both are required accessories for operating **bqStudio** — TI's official GUI f
 
 ---
 
+## Current Status
+
+**The STM32 Feather fully replaces the TI EV2300.** All three goals below are achieved.
+
+| Feature | Status |
+|---|---|
+| TI bq76940 GUI — register read/write | Working |
+| TI DLL (bq80xrw.dll) — ReadSMBusWord, WriteSMBusWord, I2CPower | Working |
+| Direct HID — read word, read byte, read block, write byte, ext read/write | Working |
+| Python automation via [scpi-instrument-toolkit](https://github.com/T-O-M-Tool-Oauto-Mationator/scpi-instrument-toolkit) | Working |
+| Compliance tests | 21/21 passing |
+| Bench tests (18V + EVM) | 19/20 passing (block read is the remaining item) |
+
+### Key Protocol Details (discovered via Ghidra reverse-engineering of TI DLLs)
+
+- **Silent commands**: I2CPower (0x18), WriteByte (0x07), and ExtWrite (0x1E) produce NO HID response — matching real EV2300 hardware behavior
+- **CRC-8**: The DLL computes CRC over `plen+5` bytes, which **includes** the trailing I2C address byte
+- **ExtRead (0x1D)**: Response payload format is `{reg, count, data[count], addr7}` — the DLL reads data from byte offset 8
+- **USB descriptors**: bcdUSB=0x0110 (USB 1.1), bInterval=1ms — matching the real EV2300's TUSB3210
+
+---
+
 ## Goal
 
-This project pursues a layered set of objectives:
+### Primary Goal — bqStudio Compatibility (Achieved)
+The firmware enumerates as a USB HID device with VID=0x0451 PID=0x0036 (identical to the real EV2300). TI's bq76940 GUI and DLL stack communicate with it seamlessly.
 
-### Primary Goal — bqStudio Compatibility
-Build firmware that enumerates as a USB HID device on the host PC, presenting the same USB VID/PID and HID report descriptor expected by bqStudio's `.dll` interface layer, enabling full register read/write through the official TI GUI.
+### Fallback Goal — Lightweight bqStudio Replacement (Achieved)
+The [scpi-instrument-toolkit](https://github.com/T-O-M-Tool-Oauto-Mationator/scpi-instrument-toolkit) provides a cross-platform Python driver (`ev2300.py`) that communicates with the bridge directly over HID — no TI software or DLLs required.
 
-### Fallback Goal — Lightweight bqStudio Replacement
-If the bqStudio USB HID protocol proves too difficult to fully reverse-engineer, implement a minimal open-source GUI replacement that exposes BQ76920 register access directly.
-
-### Ultimate Objective — Full Lab Automation
-The core motivation is eliminating the EV2300/EV2400's lack of a scripting interface. This project enables:
-
-1. **Python USB HID driver** (in sister repo) communicates with the STM32 bridge over USB
-2. **LabVIEW Python Node** (native LabVIEW 2018+ feature) calls Python functions directly from a LabVIEW VI, bridging into the Python driver
-3. **LabVIEW VIs** automate ESET 453 measurement sequences — parametric sweeps, data logging, pass/fail analysis — replacing manual bqStudio interaction entirely
-
-This enables students to achieve complete programmatic control of BQ76920 register access from LabVIEW, the environment already used in ESET labs.
-
-Firmware behavior:
-
-1. **Enumerates as a USB HID device** on the host PC, presenting the same USB VID/PID and HID report descriptor expected by bqStudio's `.dll` interface layer
-2. **Translates USB HID packets** from bqStudio into I2C/SMBus register read and write transactions to the BQ76920
-3. **Returns BQ76920 register data** back to bqStudio via USB HID response packets
-4. **Supports CRC-8 verification** on all I2C transactions (polynomial 0x07) to match BQ76920 CRC mode
+### Ultimate Objective — Full Lab Automation (Achieved)
+The Python driver enables complete programmatic control of BQ76920 register access. Students can automate ESET 453 measurement sequences via Python scripts or LabVIEW Python Nodes.
 
 ---
 
@@ -154,23 +161,28 @@ Firmware behavior:
 BQ76920_Bridge/
 ├── Core/
 │   ├── Inc/
-│   │   ├── main.h
-│   │   ├── i2c.h
-│   │   ├── usart.h
-│   │   ├── bq76920.h          # BQ76920 register map + driver
-│   │   └── usb_hid_bridge.h   # EV2400 HID packet protocol
+│   │   ├── bq76920.h              # BQ76920 register map + driver API
+│   │   └── usb_hid_bridge.h       # EV2300 HID protocol constants
 │   └── Src/
-│       ├── main.c
-│       ├── i2c.c              # HAL I2C1 init (PB6/PB7, 100kHz)
-│       ├── usart.c            # HAL USART3 init (PB10/PB11, 115200)
-│       ├── bq76920.c          # Register R/W, CRC-8, protection config
-│       └── usb_hid_bridge.c   # USB HID ↔ I2C translation layer
+│       ├── bq76920.c              # BQ76920 I2C driver (CRC/non-CRC auto-detect)
+│       └── usb_hid_bridge.c       # EV2300 protocol emulation (main bridge logic)
 ├── USB_DEVICE/
-│   └── App/usbd_custom_hid_if.c  # HID report handler — main bridge logic
-├── Drivers/                   # STM32 HAL (auto-generated)
-├── datasheets/                # Reference datasheets (STM32F405, BQ76920EVM, EV2300)
-├── CMakeLists.txt             # CMake build system (GCC + Ninja)
-├── BQ76920_Bridge.ioc         # STM32CubeMX project file
+│   └── App/usbd_desc.c            # USB descriptors (VID/PID/serial matching EV2300)
+├── Middlewares/.../HID/
+│   ├── Src/usbd_hid.c             # USB HID class (modified: 1ms bInterval)
+│   └── Inc/usbd_hid.h             # HID handle + constants
+├── tests/
+│   ├── unit/                      # Host-side unit tests (CRC, voltage, protocol)
+│   ├── integration/
+│   │   └── test_bench_no_cells.py # Full register I/O bench test (19/20 passing)
+│   └── tools/
+│       ├── test_ev2300_compliance.py  # 21-test protocol compliance suite
+│       ├── trace_dll.py           # TI DLL call tracer
+│       ├── sniff_ev2300_init.py   # Real EV2300 HID protocol sniffer
+│       └── real_ev2300_*.json     # Ground-truth captures from real hardware
+├── docs/
+│   └── STM32_EV2300_WORKFLOW.md   # Build/flash/debug workflow
+├── CMakeLists.txt
 └── README.md
 ```
 
@@ -180,58 +192,56 @@ BQ76920_Bridge/
 
 | Tool | Version | Purpose |
 |---|---|---|
-| STM32CubeMX | Latest (2026) | Peripheral config + code generation |
-| STM32CubeCLT | Latest | ARM GCC, CMake, Ninja, ST-Link GDB |
-| VSCode | Latest | IDE |
-| STM32 VS Code Extension | v2.0+ | CMake integration, Cortex-Debug |
-| CMake | Bundled with CubeCLT | Build system |
-| arm-none-eabi-gcc | Bundled with CubeCLT | Cross-compiler |
+| ARM GNU Toolchain | 14.2 rel1 | `arm-none-eabi-gcc` cross-compiler |
+| CMake | 3.28+ | Build system |
+| Ninja | Latest | Build backend |
+| dfu-util | 0.9+ | USB DFU flashing (no ST-Link needed) |
+| Python 3.10+ | 3.12 recommended | Test scripts, `hidapi` package |
+| Python 3.10-32 | 32-bit only | Required for loading TI's 32-bit DLLs |
 
 ### Build
 
 ```bash
-# Configure
+# Configure (first time only)
 cmake --preset debug
 
-# Build
+# Build firmware
 cmake --build build/debug
 
-# Generate binary for flashing
+# IMPORTANT: cmake doesn't always refresh the .bin -- always regenerate manually
 arm-none-eabi-objcopy -O binary build/debug/BQ76920_Bridge.elf build/debug/BQ76920_Bridge.bin
 ```
 
 ### Flash (DFU over USB -- no extra hardware needed)
 
-The Adafruit Feather STM32F405 has a built-in USB DFU bootloader in ROM. No ST-Link programmer required.
-
 1. **Connect the B0 pin to 3.3V** on the Feather header with a jumper wire
 2. **Press the RESET button** while USB is connected to the PC
-3. The board re-enumerates as "STM32 BOOTLOADER" (VID 0x0483, PID 0xDF11)
-4. **Flash the firmware:**
+3. The board enumerates as "STM32 BOOTLOADER" (VID 0x0483, PID 0xDF11)
+4. **Flash:**
    ```bash
    dfu-util -a 0 --dfuse-address 0x08000000:leave -D build/debug/BQ76920_Bridge.bin
    ```
-5. **Remove the B0 jumper** and press RESET -- the board boots into the firmware
-6. **Press the BOOT button on the BQ76920 EVM** to wake the AFE for I2C communication
+5. **Remove the B0 jumper** and press RESET
+6. **Press BOOT on the BQ76920 EVM** to wake the AFE
 
-Install dfu-util via Homebrew: `brew install dfu-util`
-
-Alternatively, flash via STM32CubeProgrammer (USB DFU mode) or ST-Link (SWD pads on bottom of Feather).
+> **Note:** On Windows, the DFU device may need a WinUSB driver installed via [Zadig](https://zadig.akeo.ie/) on first use.
 
 ### Run Tests
 
 ```bash
-# Unit tests (no hardware needed)
-cmake -S tests -B build/tests
-cmake --build build/tests
-ctest --test-dir build/tests --output-on-failure
+# Host unit tests (no hardware needed)
+cmake --build build/tests --config Debug --clean-first
+ctest --test-dir build/tests -C Debug --output-on-failure
 
-# Integration tests (device must be flashed and connected)
+# EV2300 protocol compliance (device must be flashed + connected to EVM)
 pip install hidapi
-python3 tests/integration/test_usb_hid_bridge.py
+python tests/tools/test_ev2300_compliance.py    # 21 tests
 
-# Full bench test (device + BQ76920 EVM powered)
-python3 tests/integration/test_bench_no_cells.py
+# Full bench test (device + BQ76920 EVM with 18V supply)
+python tests/integration/test_bench_no_cells.py  # 19/20 tests
+
+# TI DLL trace (32-bit Python required, Windows only)
+python310-32 tests/tools/trace_dll.py --dll-dir "C:\Program Files (x86)\Texas Instruments\bq76940"
 ```
 
 ---
