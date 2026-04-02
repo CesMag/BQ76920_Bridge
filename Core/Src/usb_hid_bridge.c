@@ -50,6 +50,7 @@ typedef struct
 
 static volatile uint8_t cmdPending = 0U;
 static uint8_t cmdBuffer[BRIDGE_REPORT_SIZE];
+static uint8_t *cmd_base;  /* points into cmdBuffer; offset by 1 when DLL chunk-length prefix present */
 static uint8_t rspBuffer[BRIDGE_REPORT_SIZE];
 static PendingWrite_t pendingWrite;
 static BQ76920_t *bridgeBms = NULL;
@@ -114,16 +115,27 @@ void Bridge_ProcessCommand(void)
   cmdLogIdx = (uint8_t)((cmdLogIdx + 1U) % CMD_LOG_SIZE);
   if (cmdLogCount < CMD_LOG_SIZE) { cmdLogCount++; }
 
-  uint8_t marker = cmdBuffer[1];
-  uint8_t cmd    = cmdBuffer[2];
-  uint8_t plen   = cmdBuffer[6];
+  /* TI's bq80xusb.dll (mode 1) prepends a chunk-length byte before the
+   * EV2300 frame data.  Detect this by checking whether the frame marker
+   * appears at byte[2] instead of byte[1].  If so, shift the view by 1
+   * so the rest of the parser sees the standard layout. */
+  cmd_base = cmdBuffer;
+  if (cmdBuffer[1] != EV2300_FRAME_MARKER &&
+      cmdBuffer[2] == EV2300_FRAME_MARKER)
+  {
+    cmd_base = &cmdBuffer[1];
+  }
+
+  uint8_t marker = cmd_base[1];
+  uint8_t cmd    = cmd_base[2];
+  uint8_t plen   = cmd_base[6];
 
   /* Debug command 0xFE: dump command log */
   if (marker == EV2300_FRAME_MARKER && cmd == 0xFEU)
   {
     memset(rspBuffer, 0, BRIDGE_REPORT_SIZE);
     /* Page number in command payload byte[7], default 0 */
-    uint8_t page = (cmdBuffer[6] >= 1U) ? cmdBuffer[7] : 0U;
+    uint8_t page = (cmd_base[6] >= 1U) ? cmd_base[7] : 0U;
     uint8_t start = (cmdLogCount >= CMD_LOG_SIZE) ? cmdLogIdx : 0U;
     uint8_t skip = page * 6U;
     rspBuffer[0] = cmdLogCount;
@@ -154,10 +166,10 @@ void Bridge_ProcessCommand(void)
 
   if (plen >= 1U && cmd != EV2300_CMD_SUBMIT)
   {
-    i2cAddr = Bridge_NormalizeAddress((uint16_t)cmdBuffer[7]);
+    i2cAddr = Bridge_NormalizeAddress((uint16_t)cmd_base[7]);
     if (plen >= 2U)
     {
-      reg = cmdBuffer[8];
+      reg = cmd_base[8];
     }
   }
 
@@ -186,22 +198,22 @@ void Bridge_ProcessCommand(void)
       break;
 
     case 0x1DU:
-      Handle_ExtendedRead(i2cAddr, reg, (plen >= 3U) ? cmdBuffer[9] : 0U);
+      Handle_ExtendedRead(i2cAddr, reg, (plen >= 3U) ? cmd_base[9] : 0U);
       break;
 
     case 0x1EU:
-      Handle_ExtendedWrite(&cmdBuffer[7], plen);
+      Handle_ExtendedWrite(&cmd_base[7], plen);
       break;
 
     case 0x18U:
-      Handle_I2CPower(&cmdBuffer[7], plen);
+      Handle_I2CPower(&cmd_base[7], plen);
       break;
 
     case EV2300_CMD_WRITE_WORD:
     case EV2300_CMD_WRITE_BLOCK:
     case EV2300_CMD_WRITE_BYTE:
     case EV2300_CMD_SEND_BYTE:
-      Handle_WriteCommand(cmd, &cmdBuffer[7], plen);
+      Handle_WriteCommand(cmd, &cmd_base[7], plen);
       break;
 
     case EV2300_CMD_SUBMIT:
@@ -405,7 +417,7 @@ static void Handle_ReadByte(uint16_t addr, uint8_t reg)
   if (st == HAL_OK)
   {
     uint8_t payload[3] = {reg, val, Bridge_GetAddress7(addr)};
-    EV2300_BuildRawResponse(0x42U, payload, 3U, 1U);
+    EV2300_BuildRawResponse(0x42U, payload, 3U, 0U);
   }
   else
   {
@@ -427,7 +439,7 @@ static void Handle_ReadWord(uint16_t addr, uint8_t reg)
   if (st == HAL_OK)
   {
     uint8_t payload[4] = {reg, buf[0], buf[1], Bridge_GetAddress7(addr)};
-    EV2300_BuildRawResponse(0x41U, payload, 4U, 1U);
+    EV2300_BuildRawResponse(0x41U, payload, 4U, 0U);
   }
   else
   {
@@ -446,10 +458,14 @@ static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
   uint8_t data[32];
   uint8_t reqLen = 2U; /* Default: read 2 bytes (SMBus word) */
 
-  /* If a block length was provided in the command, use it */
-  if (cmdBuffer[6] >= 3U)
+  /* If a block length was provided in the command, use it.
+   * Note: cmd_base is set in Bridge_ProcessCommand; here we access the
+   * global cmdBuffer which may be offset by 1 when the DLL chunk-length
+   * prefix is present.  For safety, rely on the caller-provided addr/reg
+   * and use a local check against the raw buffer. */
+  if (cmd_base[6] >= 3U)
   {
-    reqLen = cmdBuffer[9];
+    reqLen = cmd_base[9];
     if (reqLen > 32U) { reqLen = 32U; }
     if (reqLen == 0U) { reqLen = 2U; }
   }
@@ -459,7 +475,7 @@ static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
   {
     /* Match real EV2300: {block_count, first_data_byte, i2c_7bit_addr} */
     uint8_t payload[3] = {reqLen, data[0], Bridge_GetAddress7(addr)};
-    EV2300_BuildRawResponse(0x42U, payload, 3U, 1U);
+    EV2300_BuildRawResponse(0x42U, payload, 3U, 0U);
   }
   else
   {
@@ -495,7 +511,7 @@ static void Handle_ExtendedRead(uint16_t addr, uint8_t reg, uint8_t count)
     payload[0] = count;
     memcpy(&payload[1], data, count);
     payload[1U + count] = Bridge_GetAddress7(addr);
-    EV2300_BuildRawResponse(0x52U, payload, (uint8_t)(count + 2U), 1U);
+    EV2300_BuildRawResponse(0x52U, payload, (uint8_t)(count + 2U), 0U);
   }
   else
   {
@@ -713,20 +729,20 @@ static void Handle_Submit(void)
   */
 static void Handle_Undocumented(uint8_t cmd)
 {
-  uint8_t plen = cmdBuffer[6];
+  uint8_t plen = cmd_base[6];
 
   /* Some TI GUI paths still arrive here for payload-bearing 0x1D/0x1E.
    * Preserve the bare-command responses below, but honor the parameterized
    * forms whenever a payload is present. */
   if (cmd == 0x1DU && plen >= 3U)
   {
-    Handle_ExtendedRead((uint16_t)cmdBuffer[7], cmdBuffer[8], cmdBuffer[9]);
+    Handle_ExtendedRead((uint16_t)cmd_base[7], cmd_base[8], cmd_base[9]);
     return;
   }
 
   if (cmd == 0x1EU && plen >= 4U)
   {
-    Handle_ExtendedWrite(&cmdBuffer[7], plen);
+    Handle_ExtendedWrite(&cmd_base[7], plen);
     return;
   }
 
@@ -746,7 +762,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x00U:
     {
       static const uint8_t p[] = {0x55U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x40U, p, (uint8_t)sizeof(p), 1U);
+      EV2300_BuildRawResponse(0x40U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -754,7 +770,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x01U:
     {
       static const uint8_t p[] = {0x55U, 0x00U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x41U, p, (uint8_t)sizeof(p), 1U);
+      EV2300_BuildRawResponse(0x41U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -762,7 +778,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x02U:
     {
       static const uint8_t p[] = {0x02U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x42U, p, (uint8_t)sizeof(p), 1U);
+      EV2300_BuildRawResponse(0x42U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -777,7 +793,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x0DU:
     {
       static const uint8_t p[] = {0x02U, 0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x4EU, p, (uint8_t)sizeof(p), 1U);
+      EV2300_BuildRawResponse(0x4EU, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -797,7 +813,7 @@ static void Handle_Undocumented(uint8_t cmd)
     case 0x11U:
     {
       static const uint8_t p[] = {0x00U, 0x08U};
-      EV2300_BuildRawResponse(0x50U, p, (uint8_t)sizeof(p), 1U);
+      EV2300_BuildRawResponse(0x50U, p, (uint8_t)sizeof(p), 0U);
       EV2300_SendResponse();
       break;
     }
@@ -928,7 +944,7 @@ static void Handle_Undocumented(uint8_t cmd)
      * response so the host doesn't hang. Bare commands (plen=0) that
      * aren't listed above stay silent, matching real EV2300 timeout. */
     default:
-      if (cmdBuffer[6] > 0U)
+      if (cmd_base[6] > 0U)
       {
         EV2300_BuildErrorResponse();
         EV2300_SendResponse();
