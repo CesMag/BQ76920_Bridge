@@ -450,19 +450,19 @@ static void Handle_ReadWord(uint16_t addr, uint8_t reg)
 
 /**
   * @brief  CMD 0x02 READ_BLOCK -> response code 0x42
-  *         Real EV2300 returns short format: {block_count, first_data_byte, addr7}
-  *         with plen=3 and crcSkipTail=1. Reads the SMBus block length byte first.
+  *         Payload: {reg, count, data[0..count-1], addr7}
+  *         Same layout as ExtRead (0x1D) so the DLL parser can extract
+  *         data bytes from the expected offsets.
   */
 static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
 {
   uint8_t data[32];
+  uint8_t payload[36]; /* reg + count + up to 32 data + addr7 */
   uint8_t reqLen = 2U; /* Default: read 2 bytes (SMBus word) */
 
   /* If a block length was provided in the command, use it.
-   * Note: cmd_base is set in Bridge_ProcessCommand; here we access the
-   * global cmdBuffer which may be offset by 1 when the DLL chunk-length
-   * prefix is present.  For safety, rely on the caller-provided addr/reg
-   * and use a local check against the raw buffer. */
+   * cmd_base[6] is the payload-length field of the incoming frame;
+   * cmd_base[9] is the third payload byte (count). */
   if (cmd_base[6] >= 3U)
   {
     reqLen = cmd_base[9];
@@ -473,9 +473,11 @@ static void Handle_ReadBlock(uint16_t addr, uint8_t reg)
   HAL_StatusTypeDef st = Bridge_Read(addr, reg, data, reqLen);
   if (st == HAL_OK)
   {
-    /* Match real EV2300: {block_count, first_data_byte, i2c_7bit_addr} */
-    uint8_t payload[3] = {reqLen, data[0], Bridge_GetAddress7(addr)};
-    EV2300_BuildRawResponse(0x42U, payload, 3U, 0U);
+    payload[0] = reg;
+    payload[1] = reqLen;
+    memcpy(&payload[2], data, reqLen);
+    payload[2U + reqLen] = Bridge_GetAddress7(addr);
+    EV2300_BuildRawResponse(0x42U, payload, (uint8_t)(reqLen + 3U), 0U);
   }
   else
   {
