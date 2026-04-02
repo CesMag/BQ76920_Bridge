@@ -508,10 +508,11 @@ static void Handle_ExtendedRead(uint16_t addr, uint8_t reg, uint8_t count)
 
   if (Bridge_Read(addr, reg, data, count) == HAL_OK)
   {
-    payload[0] = count;
-    memcpy(&payload[1], data, count);
-    payload[1U + count] = Bridge_GetAddress7(addr);
-    EV2300_BuildRawResponse(0x52U, payload, (uint8_t)(count + 2U), 0U);
+    payload[0] = reg;
+    payload[1] = count;
+    memcpy(&payload[2], data, count);
+    payload[2U + count] = Bridge_GetAddress7(addr);
+    EV2300_BuildRawResponse(0x52U, payload, (uint8_t)(count + 3U), 0U);
   }
   else
   {
