@@ -135,8 +135,8 @@ class Bridge:
         pkt = build_packet(CMD_WRITE_BYTE, BQ_ADDR, reg, bytes([val]))
         return self._write_submit(pkt)
 
-    def read_block(self, reg):
-        r = self._send(build_packet(CMD_READ_BLOCK, BQ_ADDR, reg))
+    def read_block(self, reg, count=6):
+        r = self._send(build_packet(CMD_READ_BLOCK, BQ_ADDR, reg, bytes([count])))
         if r["ok"] and len(r.get("raw", b"")) > 9:
             blen = r["raw"][8]
             r["block"] = bytes(r["raw"][9:9 + blen])
