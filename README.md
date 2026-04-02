@@ -60,10 +60,10 @@ The EVM J8 I2C header and the Feather STEMMA QT connector have **different pin o
 
 | EVM J8 (top to bottom) | Wire Color | Feather Connection |
 |---|---|---|
-| 1 - GND | Black | GND |
-| 2 - SCL | Yellow | SCL (PB6) |
-| 3 - SDA | Blue | SDA (PB7) |
-| 4 - NC | -- | Not connected |
+| 1 - GND | Black (QIIC) / Black (HPA002)  | GND |
+| 2 - SCL | Yellow (QIIC) / White (HPA002) | SCL (PB6) |
+| 3 - SDA | Blue (QIIC) / Brown (HPA002) | SDA (PB7) |
+| 4 - NC | NC (QIIC) / Red (HPA002) | Not connected |
 
 The Feather STEMMA QT pinout is GND / V+ / SDA / SCL -- note that SCL and SDA are swapped relative to the EVM, and the EVM has no power pin where the Feather has V+.
 
