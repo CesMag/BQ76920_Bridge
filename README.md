@@ -217,12 +217,17 @@ arm-none-eabi-objcopy -O binary build/debug/BQ76920_Bridge.elf build/debug/BQ769
 1. **Connect the B0 pin to 3.3V** on the Feather header with a jumper wire
 2. **Press the RESET button** while USB is connected to the PC
 3. The board enumerates as "STM32 BOOTLOADER" (VID 0x0483, PID 0xDF11)
-4. **Flash:**
+4. **Regenerate the binary** (cmake does not auto-update the .bin):
    ```bash
-   dfu-util -a 0 --dfuse-address 0x08000000:leave -D build/debug/BQ76920_Bridge.bin
+   arm-none-eabi-objcopy -O binary build/debug/BQ76920_Bridge.elf build/debug/BQ76920_Bridge.bin
    ```
-5. **Remove the B0 jumper** and press RESET
-6. **Press BOOT on the BQ76920 EVM** to wake the AFE
+5. **Flash** (`:force` is required -- without it dfu-util stalls mid-download):
+   ```bash
+   dfu-util -a 0 --dfuse-address 0x08000000:force:leave -D build/debug/BQ76920_Bridge.bin
+   ```
+   If the device reports `dfuERROR`, run the same command again -- it auto-clears and retries.
+6. **Remove the B0 jumper** and press RESET
+7. **Press BOOT on the BQ76920 EVM** to wake the AFE
 
 > **Note:** On Windows, the DFU device may need a WinUSB driver installed via [Zadig](https://zadig.akeo.ie/) on first use.
 
