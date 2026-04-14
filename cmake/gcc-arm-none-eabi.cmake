@@ -4,9 +4,18 @@ set(CMAKE_SYSTEM_PROCESSOR          arm)
 set(CMAKE_C_COMPILER_ID GNU)
 set(CMAKE_CXX_COMPILER_ID GNU)
 
-# Some default GCC settings
-# arm-none-eabi- must be part of path environment
+# Auto-detect toolchain from STM32CubeCLT; fall back to PATH
 set(TOOLCHAIN_PREFIX                arm-none-eabi-)
+if(CMAKE_HOST_APPLE OR CMAKE_HOST_UNIX)
+    file(GLOB _CLT_BIN_DIRS "/opt/ST/STM32CubeCLT_*/GNU-tools-for-STM32/bin")
+    if(_CLT_BIN_DIRS)
+        list(SORT _CLT_BIN_DIRS ORDER DESCENDING)
+        list(GET _CLT_BIN_DIRS 0 _CLT_BIN)
+        set(TOOLCHAIN_PREFIX "${_CLT_BIN}/arm-none-eabi-")
+    endif()
+    unset(_CLT_BIN_DIRS)
+    unset(_CLT_BIN)
+endif()
 
 set(CMAKE_C_COMPILER                ${TOOLCHAIN_PREFIX}gcc)
 set(CMAKE_ASM_COMPILER              ${CMAKE_C_COMPILER})
