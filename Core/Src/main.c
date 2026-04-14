@@ -110,6 +110,9 @@ int main(void)
   }
 
   Bridge_Init(&bms);
+
+  int bmsInitOk = (bmsStatus == HAL_OK) ? 1 : 0;
+  uint32_t lastReinitAttempt = HAL_GetTick();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,6 +123,26 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     Bridge_ProcessCommand();
+
+    /* If BQ76920 was not present at startup, retry init every 2 s.
+     * BQ76920_Initialise() is safe to call repeatedly: it resets the struct
+     * then re-detects the I2C address.  Once it succeeds the existing
+     * bridgeBms pointer (set by Bridge_Init) picks up the updated state
+     * automatically -- no bridge re-registration needed. */
+    if (!bmsInitOk)
+    {
+      uint32_t now = HAL_GetTick();
+      if (now - lastReinitAttempt >= 2000U)
+      {
+        lastReinitAttempt = now;
+        if (BQ76920_Initialise(&bms, &hi2c1, 5, 4.25f, 2.8f, 2600, 3.6f) == HAL_OK)
+        {
+          bmsInitOk = 1;
+          printf("BMS ReInit: OK  addr=0x%02X  CRC=%s  GAIN=%u  OFFSET=%d\r\n",
+                 bms.i2cAddr, bms.crcEnabled ? "on" : "off", bms.GAIN, bms.OFFSET);
+        }
+      }
+    }
 
     /* Non-blocking LED heartbeat: toggle every 500ms without blocking the loop */
     {
