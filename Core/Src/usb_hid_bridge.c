@@ -18,6 +18,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usb_hid_bridge.h"
+#include "firmware_version.h"
 #include "usb_device.h"
 #include "i2c.h"
 #include <string.h>
@@ -175,7 +176,7 @@ void Bridge_ProcessCommand(void)
 
   /* Real EV2300 ignores I2C commands with no payload (full sweep confirmed).
    * Only process read/write if we have at least an I2C address byte. */
-  if (plen == 0U && cmd != EV2300_CMD_SUBMIT && cmd != 0x70U)
+  if (plen == 0U && cmd != EV2300_CMD_SUBMIT && cmd != 0x70U && cmd != BRIDGE_CMD_GET_VERSION)
   {
     /* No payload = no I2C address. Real EV2300 does not respond. */
     Handle_Undocumented(cmd);
@@ -938,6 +939,16 @@ static void Handle_Undocumented(uint8_t cmd)
         0x07U, 0x05U, 0x01U, 0x02U, 0x40U, 0x00U, 0x00U,
       };
       EV2300_BuildRawResponse(0x60U, desc, (uint8_t)sizeof(desc), 0U);
+      EV2300_SendResponse();
+      break;
+    }
+
+    /* 0x71 -> 0xB1 with firmware version string */
+    case BRIDGE_CMD_GET_VERSION:
+    {
+      static const uint8_t ver[] = FW_VERSION_STR;
+      EV2300_BuildRawResponse(BRIDGE_CMD_GET_VERSION | EV2300_RESP_FLAG,
+                              ver, (uint8_t)(sizeof(ver) - 1U), 0U);
       EV2300_SendResponse();
       break;
     }

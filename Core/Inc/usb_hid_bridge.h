@@ -47,6 +47,14 @@
 #define EV2300_CMD_DEVICE_INFO 0x70U  /*!< Device info (170 bytes)     */
 /** @} */
 
+/**
+  * @defgroup Bridge_Extensions Firmware-specific bridge commands
+  * @brief Commands added by this firmware; not part of the real EV2300 protocol.
+  * @{
+  */
+#define BRIDGE_CMD_GET_VERSION 0x71U  /*!< Firmware version string     */
+/** @} */
+
 /* Exported function prototypes ----------------------------------------------*/
 
 /**

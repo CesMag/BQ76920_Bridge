@@ -53,9 +53,21 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
 )
 
+# Inject git commit hash as a compile definition for firmware versioning
+execute_process(
+    COMMAND git -C ${CMAKE_SOURCE_DIR} log -1 --format=%h
+    OUTPUT_VARIABLE FW_GIT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
+)
+if(NOT FW_GIT_HASH)
+    set(FW_GIT_HASH "unknown")
+endif()
+message("Firmware git hash: ${FW_GIT_HASH}")
+
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined symbols
+    FW_GIT_HASH="${FW_GIT_HASH}"
 )
 
 # Remove wrong libob.a library dependency when using cpp files
