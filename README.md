@@ -95,6 +95,47 @@ Both are required accessories for operating **bqStudio** — TI's official GUI f
 - **ExtRead (0x1D)**: Response payload format is `{reg, count, data[count], addr7}` — the DLL reads data from byte offset 8
 - **USB descriptors**: bcdUSB=0x0110 (USB 1.1), bInterval=1ms — matching the real EV2300's TUSB3210
 
+### Firmware Extensions (non-EV2300 commands)
+
+Commands added by this firmware that live outside the real EV2300 protocol space. Named `BRIDGE_CMD_*` in `Core/Inc/usb_hid_bridge.h` to keep the `EV2300_CMD_*` namespace reserved for commands present on real hardware.
+
+Request codes sit in `0x30-0x3F` (bit 6 clear) so the response code is `cmd | 0x40`, matching the real EV2300's 0x01 -> 0x41 pattern.
+
+| Request | Response | Name | Payload | Response body | Purpose |
+|---|---|---|---|---|---|
+| `0x31` | `0x71` | `BRIDGE_CMD_GET_VERSION` | none (`plen = 0`) | ASCII `MAJOR.MINOR.PATCH+<git-hash>` | Identify the running firmware build |
+
+**Query from Python:**
+
+```python
+import hid
+
+d = hid.device()
+d.open(0x0451, 0x0036)
+
+# EV2300-style frame: [len, 0xAA, 0x31, 0,0,0, plen=0, crc, 0x55, ...]
+pkt = bytearray(64)
+pkt[0] = 8
+pkt[1] = 0xAA
+pkt[2] = 0x31                             # BRIDGE_CMD_GET_VERSION
+pkt[6] = 0
+crc = 0
+for b in pkt[2:7]:
+    crc ^= b
+    for _ in range(8):
+        crc = ((crc << 1) ^ 0x07) & 0xFF if crc & 0x80 else (crc << 1) & 0xFF
+pkt[7] = crc
+pkt[8] = 0x55
+
+d.write(bytes([0x00]) + bytes(pkt))       # 0x00 = report-ID prefix (macOS/Linux HID)
+resp = d.read(64, timeout_ms=500)
+assert resp[2] == 0x71                    # request | 0x40
+plen = resp[6]
+print(resp[7:7 + plen].decode())          # e.g. "1.0.0+f23b569"
+```
+
+`FW_GIT_HASH` is injected by CMake from `git log -1 --format=%h` at configure time and falls back to `"unknown"` if the tree has no git metadata. The numeric part comes from `FW_VER_MAJOR/MINOR/PATCH` in `Core/Inc/firmware_version.h`, stringified at preprocess time so the integer and string forms cannot drift apart.
+
 ---
 
 ## Goal

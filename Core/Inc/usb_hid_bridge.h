@@ -50,9 +50,13 @@
 /**
   * @defgroup Bridge_Extensions Firmware-specific bridge commands
   * @brief Commands added by this firmware; not part of the real EV2300 protocol.
+  *
+  * Requests live in 0x30-0x3F (bit 6 clear) so OR'ing EV2300_RESP_FLAG
+  * (0x40) produces a distinct response code in 0x70-0x7F, mirroring the
+  * 0x01 -> 0x41 pattern used by real EV2300 commands.
   * @{
   */
-#define BRIDGE_CMD_GET_VERSION 0x71U  /*!< Firmware version string     */
+#define BRIDGE_CMD_GET_VERSION 0x31U  /*!< Firmware version string (resp 0x71) */
 /** @} */
 
 /* Exported function prototypes ----------------------------------------------*/
