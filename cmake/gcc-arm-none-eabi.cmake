@@ -9,7 +9,9 @@ set(TOOLCHAIN_PREFIX                arm-none-eabi-)
 if(CMAKE_HOST_APPLE OR CMAKE_HOST_UNIX)
     file(GLOB _CLT_BIN_DIRS "/opt/ST/STM32CubeCLT_*/GNU-tools-for-STM32/bin")
     if(_CLT_BIN_DIRS)
-        list(SORT _CLT_BIN_DIRS ORDER DESCENDING)
+        # COMPARE NATURAL (CMake >= 3.18) orders version numbers numerically,
+        # so STM32CubeCLT_1.10.0 sorts above 1.9.0 instead of lexicographically.
+        list(SORT _CLT_BIN_DIRS COMPARE NATURAL ORDER DESCENDING)
         list(GET _CLT_BIN_DIRS 0 _CLT_BIN)
         set(TOOLCHAIN_PREFIX "${_CLT_BIN}/arm-none-eabi-")
     endif()
