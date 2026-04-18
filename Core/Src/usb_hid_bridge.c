@@ -943,7 +943,7 @@ static void Handle_Undocumented(uint8_t cmd)
       break;
     }
 
-    /* 0x71 -> 0xB1 with firmware version string */
+    /* 0x31 -> 0x71 with firmware version string */
     case BRIDGE_CMD_GET_VERSION:
     {
       static const uint8_t ver[] = FW_VERSION_STR;
