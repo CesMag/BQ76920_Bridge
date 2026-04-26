@@ -42,6 +42,15 @@ void MX_I2C1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
+/**
+  * @brief Reset I2C1 peripheral and recover the bus from a wedged state.
+  *
+  * Call this before any retry of a probe/transaction that has previously
+  * NACKed.  See implementation comment in i2c.c for the failure mode this
+  * routine works around.
+  */
+void MX_I2C1_BusRecover(void);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
