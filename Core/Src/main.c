@@ -135,6 +135,12 @@ int main(void)
       if (now - lastReinitAttempt >= 2000U)
       {
         lastReinitAttempt = now;
+        /* Recover the I2C peripheral before each retry.  The previous
+         * IsDeviceReady NACK leaves AF set and BUSY potentially stuck on
+         * STM32F4; without an explicit reset every subsequent probe sees
+         * the same wedged state and silently fails forever, even after
+         * the BQ chip wakes up.  See MX_I2C1_BusRecover() in i2c.c. */
+        MX_I2C1_BusRecover();
         if (BQ76920_Initialise(&bms, &hi2c1, 5, 4.25f, 2.8f, 2600, 3.6f) == HAL_OK)
         {
           bmsInitOk = 1;
